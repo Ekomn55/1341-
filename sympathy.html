@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sympathy Arrangements | 1341 Floral Designs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* ── Dawn-style reset & variables ── */
+        :root {
+            --color-background:          255, 255, 255;
+            --gradient-background:       #ffffff;
+            --color-foreground:          18, 18, 18;
+            --color-background-contrast: 191, 191, 191;
+            --color-shadow:              18, 18, 18;
+            --color-button:              18, 18, 18;
+            --color-button-text:         255, 255, 255;
+            --color-secondary-button:    255, 255, 255;
+            --color-secondary-button-text: 18, 18, 18;
+            --color-link:                18, 18, 18;
+            --color-badge-foreground:    18, 18, 18;
+            --color-badge-background:    255, 255, 255;
+            --color-badge-border:        18, 18, 18;
+
+            --font-body-family:   "system-ui", -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-body-style:    normal;
+            --font-body-weight:   400;
+            --font-body-weight-bold: 700;
+            --font-heading-family: 'Trirong', serif;
+            --font-heading-style:  normal;
+            --font-heading-weight: 400;
+            --font-body-scale:     1.0;
+            --font-heading-scale:  1.0;
+
+            --page-width:         120rem;
+            --page-width-margin:  0rem;
+            --product-card-corner-radius: 0rem;
+            --product-card-border-width:  0rem;
+
+            --duration-default:   .2s;
+            --duration-medium:    .3s;
+            --duration-long:      .5s;
+            --ease-out-slow:      cubic-bezier(0, 0, .3, 1);
+
+            --alpha-button-background: 1;
+            --alpha-button-border:     1;
+            --alpha-link:              .85;
+        }
+
+        html {
+            box-sizing: border-box;
+            font-size: calc(var(--font-body-scale) * 62.5%);
+            height: 100%;
+        }
+        *, *::before, *::after { box-sizing: inherit; }
+
+        ::selection {
+            background-color: rgba(var(--color-foreground), .2);
+        }
+
+        body.dawn-page {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            grid-template-columns: 100%;
+            min-height: 100%;
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 0.06rem;
+            line-height: calc(1 + 0.8 / var(--font-body-scale));
+            font-family: var(--font-body-family);
+            font-style: var(--font-body-style);
+            font-weight: var(--font-body-weight);
+            color: rgba(var(--color-foreground), 0.75);
+            background-color: rgb(var(--color-background));
+        }
+
+        @media screen and (min-width: 750px) {
+            body.dawn-page { font-size: 1.6rem; }
+        }
+
+        .gradient {
+            background: rgb(var(--color-background));
+            background: var(--gradient-background);
+            background-attachment: fixed;
+        }
+
+        /* ── Page wrapper ── */
+        .page-width {
+            max-width: var(--page-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        @media screen and (min-width: 750px) {
+            .page-width { padding: 0 5rem; }
+        }
+
+        /* ── Dawn Header (overrides site header for this page) ── */
+        .dawn-header {
+            background: rgb(var(--color-background));
+            border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        .dawn-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 5rem;
+            gap: 2rem;
+        }
+        .dawn-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+        .dawn-logo img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        .dawn-logo-text {
+            font-family: var(--font-heading-family);
+            font-size: 2rem;
+            color: rgba(var(--color-foreground), 1);
+            letter-spacing: 0.02em;
+        }
+        .dawn-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+            margin: 0; padding: 0;
+        }
+        .dawn-nav li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            color: rgba(var(--color-foreground), 0.75);
+            text-decoration: none;
+            transition: color var(--duration-default);
+        }
+        .dawn-nav li a:hover { color: rgba(var(--color-foreground), 1); }
+        .dawn-header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .dawn-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(var(--color-foreground), 0.75);
+            font-size: 1.3rem;
+            letter-spacing: 0.08rem;
+            text-transform: uppercase;
+            font-family: var(--font-body-family);
+            padding: 0.8rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: color var(--duration-default);
+        }
+        .dawn-icon-btn:hover { color: rgba(var(--color-foreground), 1); }
+
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            padding: 1.5rem 0;
+            font-size: 1.3rem;
+            color: rgba(var(--color-foreground), 0.5);
+        }
+        .breadcrumb a {
+            color: rgba(var(--color-foreground), 0.5);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover { color: rgba(var(--color-foreground), 0.85); text-decoration: underline; }
+        .breadcrumb span { margin: 0 0.6rem; }
+
+        /* ── Collection hero ── */
+        .collection-hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+            border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            margin-bottom: 5rem;
+        }
+        .collection-hero h1 {
+            font-family: var(--font-heading-family);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 4.5rem;
+            letter-spacing: -0.02em;
+            color: rgba(var(--color-foreground), 0.9);
+            margin: 0 0 1.5rem;
+            line-height: 1.15;
+        }
+        @media screen and (min-width: 750px) {
+            .collection-hero h1 { font-size: 6rem; }
+        }
+        .collection-hero p {
+            font-size: 1.6rem;
+            color: rgba(var(--color-foreground), 0.6);
+            max-width: 56rem;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        .collection-count {
+            font-size: 1.3rem;
+            color: rgba(var(--color-foreground), 0.45);
+            margin-top: 1rem;
+            letter-spacing: 0.05rem;
+        }
+
+        /* ── Filter / sort bar ── */
+        .collection-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            margin-bottom: 4rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .toolbar-left {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-tag {
+            font-size: 1.3rem;
+            padding: 0.6rem 1.6rem;
+            border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+            background: none;
+            cursor: pointer;
+            font-family: var(--font-body-family);
+            color: rgba(var(--color-foreground), 0.75);
+            transition: all var(--duration-default);
+            letter-spacing: 0.05rem;
+        }
+        .filter-tag:hover, .filter-tag.active {
+            background: rgba(var(--color-foreground), 1);
+            color: rgb(var(--color-background));
+            border-color: rgba(var(--color-foreground), 1);
+        }
+        .toolbar-right {
+            font-size: 1.3rem;
+            color: rgba(var(--color-foreground), 0.5);
+            letter-spacing: 0.05rem;
+        }
+
+        /* ── Product grid (Dawn style) ── */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem 2rem;
+            margin-bottom: 8rem;
+        }
+        @media screen and (min-width: 750px) {
+            .product-list { grid-template-columns: repeat(3, 1fr); gap: 4rem 3rem; }
+        }
+        @media screen and (min-width: 990px) {
+            .product-list { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .dawn-product-card { display: flex; flex-direction: column; }
+
+        .dawn-card-media {
+            position: relative;
+            padding-bottom: 100%;
+            overflow: hidden;
+            background: rgba(var(--color-foreground), 0.04);
+            margin-bottom: 1.6rem;
+        }
+        .dawn-card-media img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: contain;
+            background: #f9f6f0;
+            transition: transform var(--duration-long) var(--ease-out-slow);
+        }
+        .dawn-product-card:hover .dawn-card-media img {
+            transform: scale(1.04);
+        }
+        .dawn-badge {
+            position: absolute;
+            top: 1rem; left: 1rem;
+            background: rgba(var(--color-foreground), 1);
+            color: rgb(var(--color-background));
+            font-size: 1.1rem;
+            font-weight: var(--font-body-weight-bold);
+            letter-spacing: 0.07rem;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            z-index: 1;
+        }
+
+        .dawn-card-info { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+
+        .dawn-card-vendor {
+            font-size: 1.2rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            color: rgba(var(--color-foreground), 0.45);
+        }
+        .dawn-card-title {
+            font-family: var(--font-heading-family);
+            font-size: 1.7rem;
+            font-weight: var(--font-heading-weight);
+            color: rgba(var(--color-foreground), 0.9);
+            text-decoration: none;
+            line-height: 1.35;
+            margin: 0;
+        }
+        .dawn-card-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .dawn-card-title a:hover { text-decoration: underline; }
+
+        .dawn-card-price {
+            font-size: 1.5rem;
+            color: rgba(var(--color-foreground), 0.9);
+            font-weight: 500;
+            margin-top: 0.4rem;
+        }
+        .dawn-card-price s {
+            color: rgba(var(--color-foreground), 0.4);
+            font-weight: 400;
+            margin-right: 0.5rem;
+            font-size: 1.3rem;
+        }
+        .dawn-card-desc {
+            font-size: 1.3rem;
+            color: rgba(var(--color-foreground), 0.5);
+            line-height: 1.6;
+            margin-top: 0.4rem;
+        }
+
+        .dawn-card-btn {
+            margin-top: 1.6rem;
+            display: inline-block;
+            background: rgba(var(--color-button), var(--alpha-button-background));
+            color: rgb(var(--color-button-text));
+            font-family: var(--font-body-family);
+            font-size: 1.3rem;
+            font-weight: var(--font-body-weight-bold);
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            padding: 1.2rem 2.4rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity var(--duration-default);
+            text-align: center;
+        }
+        .dawn-card-btn:hover { opacity: 0.75; color: rgb(var(--color-button-text)); }
+
+        /* ── Info banner ── */
+        .info-banner {
+            background: rgba(var(--color-foreground), 0.04);
+            padding: 4rem 5rem;
+            margin-bottom: 8rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+        }
+        @media screen and (max-width: 750px) {
+            .info-banner { grid-template-columns: 1fr; padding: 3rem 2rem; }
+        }
+        .info-item { text-align: center; }
+        .info-item .ico { font-size: 2.8rem; margin-bottom: 1rem; }
+        .info-item strong {
+            display: block;
+            font-family: var(--font-heading-family);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: rgba(var(--color-foreground), 0.9);
+            margin-bottom: 0.5rem;
+        }
+        .info-item span {
+            font-size: 1.3rem;
+            color: rgba(var(--color-foreground), 0.5);
+            line-height: 1.6;
+        }
+
+        /* ── Rich text block ── */
+        .rich-text {
+            text-align: center;
+            padding: 6rem 0;
+            max-width: 72rem;
+            margin: 0 auto;
+        }
+        .rich-text h2 {
+            font-family: var(--font-heading-family);
+            font-weight: 300;
+            font-style: italic;
+            font-size: 3.5rem;
+            color: rgba(var(--color-foreground), 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        .rich-text p {
+            font-size: 1.5rem;
+            color: rgba(var(--color-foreground), 0.6);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+        .rich-text a.dawn-link {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            color: rgba(var(--color-foreground), 0.9);
+            text-decoration: underline;
+            text-underline-offset: 0.3rem;
+        }
+
+        /* ── Footer (dawn minimal) ── */
+        .dawn-footer {
+            background: rgba(var(--color-foreground), 0.04);
+            border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+            padding: 4rem 0 2rem;
+        }
+        .dawn-footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            padding-bottom: 4rem;
+            border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+        }
+        @media screen and (max-width: 750px) {
+            .dawn-footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+        }
+        .dawn-footer h3 {
+            font-family: var(--font-body-family);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+            color: rgba(var(--color-foreground), 0.85);
+            margin-bottom: 1.5rem;
+        }
+        .dawn-footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.8rem; }
+        .dawn-footer ul li a {
+            font-size: 1.4rem;
+            color: rgba(var(--color-foreground), 0.55);
+            text-decoration: none;
+            transition: color var(--duration-default);
+        }
+        .dawn-footer ul li a:hover { color: rgba(var(--color-foreground), 1); }
+        .dawn-footer-logo img { height: 70px; width: 70px; border-radius: 50%; object-fit: contain; margin-bottom: 1.5rem; }
+        .dawn-footer-about { font-size: 1.4rem; color: rgba(var(--color-foreground), 0.5); line-height: 1.7; }
+        .dawn-footer-bottom {
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            color: rgba(var(--color-foreground), 0.4);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        @media screen and (max-width: 750px) {
+            .dawn-header-inner { padding: 1.5rem 2rem; }
+            .dawn-nav { display: none; }
+            .collection-hero { padding: 4rem 0 3rem; }
+            .collection-hero h1 { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body class="dawn-page gradient">
+
+<div class="t-announce">
+    <span>Free consultation on all custom orders</span>
+    <span class="sep">|</span>
+    <a href="tel:6124540549">Call (612) 454-0549</a>
+    <span class="sep">|</span>
+    <span>Mon–Fri 8AM–5PM &nbsp;·&nbsp; Minneapolis, MN</span>
+</div>
+<header class="t-header">
+    <div class="t-header-inner">
+        <nav><ul class="t-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="services.html">Additional Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul></nav>
+        <a href="index.html" class="t-logo">
+            <img src="1341logo1.png" alt="1341 Floral Designs">
+        </a>
+        <div class="t-header-right">
+            <button class="t-nav-toggle" id="nav-toggle">&#9776;</button>
+            <a href="contact.html" class="t-cta">Order Now</a>
+        </div>
+    </div>
+</header>
+<nav class="t-mobile-nav" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html">Shop Online</a>
+    <a href="services.html">Additional Services</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<!-- ── Main ── -->
+<main class="gradient">
+
+    <!-- Breadcrumb -->
+    <div class="page-width">
+        <nav class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>&#8250;</span>
+            <span>Sympathy Arrangements</span>
+        </nav>
+    </div>
+
+    <!-- Collection Hero -->
+    <div class="collection-hero page-width">
+        <h1>Sympathy Arrangements</h1>
+        <p>We create heartfelt, dignified arrangements to express your condolences and bring comfort during life's most difficult moments. Each piece is crafted with compassion and care.</p>
+        <p class="collection-count">8 arrangements available &mdash; all handcrafted to order</p>
+    </div>
+
+    <div class="page-width">
+
+        <!-- Toolbar -->
+        <div class="collection-toolbar">
+            <div class="toolbar-left">
+                <button class="filter-tag active" onclick="filterProducts('all', this)">All</button>
+                <button class="filter-tag" onclick="filterProducts('bouquet', this)">Bouquets</button>
+                <button class="filter-tag" onclick="filterProducts('basket', this)">Baskets &amp; Plants</button>
+                <button class="filter-tag" onclick="filterProducts('wreath', this)">Wreaths &amp; Sprays</button>
+            </div>
+            <div class="toolbar-right">8 products</div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-list" id="product-list">
+
+            <div class="dawn-product-card" data-type="basket">
+                <div class="dawn-card-media">
+                    <img src="2024-10-29-23-34-16-713.jpg" alt="Peace Lily Plant">
+                    <span class="dawn-badge">Popular</span>
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Baskets &amp; Plants</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Peace Lily</a></h2>
+                    <p class="dawn-card-desc">A beautiful, lasting peace lily in a white woven basket — a meaningful symbol of tranquility and remembrance.</p>
+                    <div class="dawn-card-price">$75</div>
+                    <a href="contact.html?service=sympathy&item=peace-lily" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="bouquet">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1559181567-c3190ca9d3b0?w=600&q=80" alt="Soft Rose Condolence Bouquet">
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Sympathy Bouquets</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Soft Rose Condolence Bouquet</a></h2>
+                    <p class="dawn-card-desc">Gentle pastel roses in blush and cream, hand-tied and wrapped for delivery or collection.</p>
+                    <div class="dawn-card-price">From $70</div>
+                    <a href="contact.html?service=sympathy&item=soft-rose" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="wreath">
+                <div class="dawn-card-media">
+                    <img src="20240516_105332.jpg" alt="Standing Sympathy Wreath">
+                    <span class="dawn-badge">Bestseller</span>
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Wreaths &amp; Sprays</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Standing Sympathy Wreath</a></h2>
+                    <p class="dawn-card-desc">A full circular wreath on a stand — a dignified tribute for the service or graveside. Customizable with personalized ribbon lettering.</p>
+                    <div class="dawn-card-price">$200</div>
+                    <a href="contact.html?service=sympathy&item=wreath" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="wreath">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&q=80" alt="White Standing Spray">
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Wreaths &amp; Sprays</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">White Standing Spray</a></h2>
+                    <p class="dawn-card-desc">An elegant floor-standing spray of white blooms, perfect for chapel or graveside display.</p>
+                    <div class="dawn-card-price">From $150</div>
+                    <a href="contact.html?service=sympathy&item=standing-spray" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="basket">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=600&q=80" alt="Sympathy Plant Basket">
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Baskets &amp; Plants</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Sympathy Plant Basket</a></h2>
+                    <p class="dawn-card-desc">A lasting living tribute — a curated basket of green plants to bring calm and comfort to the home.</p>
+                    <div class="dawn-card-price">From $75</div>
+                    <a href="contact.html?service=sympathy&item=plant-basket" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="bouquet">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=600&q=80" alt="Garden Sympathy Bouquet">
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Sympathy Bouquets</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Garden Sympathy Bouquet</a></h2>
+                    <p class="dawn-card-desc">A soft, garden-style arrangement of seasonal whites and greens. Gently wild, deeply personal.</p>
+                    <div class="dawn-card-price">From $80</div>
+                    <a href="contact.html?service=sympathy&item=garden" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="wreath">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1487530811015-780a8fbc0db8?w=600&q=80" alt="Mixed Tribute Spray">
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Wreaths &amp; Sprays</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Mixed Tribute Spray</a></h2>
+                    <p class="dawn-card-desc">A large, lush floor spray blending white, cream, and soft colour. A rich and moving display.</p>
+                    <div class="dawn-card-price">From $135</div>
+                    <a href="contact.html?service=sympathy&item=mixed-spray" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+            <div class="dawn-product-card" data-type="basket">
+                <div class="dawn-card-media">
+                    <img src="https://images.unsplash.com/photo-1567696911980-2eed69a46042?w=600&q=80" alt="Comfort Gift Basket">
+                    <span class="dawn-badge">New</span>
+                </div>
+                <div class="dawn-card-info">
+                    <span class="dawn-card-vendor">Baskets &amp; Plants</span>
+                    <h2 class="dawn-card-title"><a href="contact.html">Comfort Gift Basket</a></h2>
+                    <p class="dawn-card-desc">Flowers, a plant, and thoughtful gifts combined in one basket — a warm gesture of care and support.</p>
+                    <div class="dawn-card-price">From $95</div>
+                    <a href="contact.html?service=sympathy&item=comfort-basket" class="dawn-card-btn">Request This Arrangement</a>
+                </div>
+            </div>
+
+        </div><!-- /product-list -->
+
+        <!-- Info banner -->
+        <div class="info-banner">
+            <div class="info-item">
+                <div class="ico">🤍</div>
+                <strong>Handled with Care</strong>
+                <span>Every sympathy order is treated with the utmost compassion and sensitivity.</span>
+            </div>
+            <div class="info-item">
+                <div class="ico">🚚</div>
+                <strong>Same-Day Available</strong>
+                <span>Emergency delivery available. Call us directly at (612) 454-0549.</span>
+            </div>
+            <div class="info-item">
+                <div class="ico">🎨</div>
+                <strong>Fully Customisable</strong>
+                <span>We can match any colour palette, flower preference, or personal touch.</span>
+            </div>
+        </div>
+
+        <!-- Rich text -->
+        <div class="rich-text">
+            <h2>Here when it matters most.</h2>
+            <p>Losing someone is never easy. At 1341 Floral Designs, we understand the importance of getting every detail right during these difficult times. Our sympathy arrangements are crafted with care, compassion, and an understanding of what flowers mean in moments of grief.</p>
+            <p>Whether you need a simple bouquet for delivery or a full service arrangement, we're here to help. Call us or submit a request and we'll guide you through the process gently.</p>
+            <a href="contact.html" class="dawn-link">Contact us to discuss your needs &rarr;</a>
+        </div>
+
+    </div><!-- /page-width -->
+</main>
+
+<footer class="t-footer">
+    <div class="t-footer-grid">
+        <div>
+            <div class="t-footer-logo-num">1341</div>
+            <div class="t-footer-logo-sub">Floral Designs</div>
+            <p class="t-footer-about">Locally owned and operated in Minneapolis, Minnesota. Bold, handcrafted floral designs for every occasion.</p>
+            <p style="font-size:11px;color:rgba(255,255,255,0.12);margin-top:12px;">Owner: Everett Bryant</p>
+        </div>
+        <div class="t-footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="shop.html">Shop Online</a></li>
+                <li><a href="services.html">Additional Services</a></li>
+                <li><a href="index.html#reviews">Reviews</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="t-footer-col">
+            <h4>Contact Us</h4>
+            <div class="t-footer-contact-item"><span class="ico">📞</span><a href="tel:6124540549">(612) 454-0549</a></div>
+            <div class="t-footer-contact-item"><span class="ico">✉️</span><a href="mailto:1341floraldesigns@gmail.com">1341floraldesigns@gmail.com</a></div>
+            <div class="t-footer-contact-item"><span class="ico">📍</span><span>Minneapolis, MN</span></div>
+            <div class="t-footer-contact-item"><span class="ico">🕐</span><span>Mon–Fri: 8AM – 5PM</span></div>
+        </div>
+    </div>
+    <div class="t-footer-bottom">
+        <span>&copy; 2025 1341 Floral Designs. All rights reserved.</span>
+        <span>Minneapolis, Minnesota</span>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+        document.getElementById('mobile-nav').classList.toggle('open');
+    });
+
+    function filterProducts(type, btn) {
+        // Update active button
+        document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Show/hide cards
+        document.querySelectorAll('.dawn-product-card').forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update count
+        const visible = document.querySelectorAll('.dawn-product-card:not([style*="display: none"])').length;
+        document.querySelector('.toolbar-right').textContent = visible + ' product' + (visible !== 1 ? 's' : '');
+    }
+</script>
+<script src="polish.js"></script>
+</body>
+</html>

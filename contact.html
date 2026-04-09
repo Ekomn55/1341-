@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | 1341 Floral Designs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, #1a1040 0%, #2b1a60 60%, #3a1060 100%);
+            padding: 96px 0 64px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .contact-hero-content { position: relative; z-index: 1; }
+        .contact-hero .hero-eyebrow {
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .contact-hero h1 { font-size: var(--f9); font-weight: 700; color: #fff; margin-bottom: 16px; }
+        .contact-hero p { font-size: var(--f5); color: rgba(255,255,255,0.65); max-width: 540px; margin: 0 auto; line-height: 1.6; }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 48px;
+            align-items: start;
+        }
+        @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+
+        /* Info panel */
+        .contact-info-panel {
+            background: linear-gradient(160deg, #1a1040 0%, #2b1a60 100%);
+            border-radius: 12px;
+            padding: 40px 36px;
+            color: #fff;
+        }
+        .contact-info-panel h2 { font-size: var(--f7); color: #fff; margin-bottom: 8px; }
+        .contact-info-panel > p { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 32px; line-height: 1.6; }
+
+        .info-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        .info-icon {
+            width: 44px; height: 44px;
+            background: rgba(201,146,26,0.15);
+            border: 1px solid rgba(201,146,26,0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .info-item-text strong { display: block; font-family: var(--font-heading); font-size: 16px; color: var(--color-primary); margin-bottom: 4px; }
+        .info-item-text span, .info-item-text a { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; display: block; text-decoration: none; }
+        .info-item-text a:hover { color: var(--color-primary); }
+
+        .info-divider { border: none; border-top: 1px solid rgba(201,146,26,0.2); margin: 28px 0; }
+
+        .social-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .social-pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .social-pill:hover { background: rgba(201,146,26,0.2); color: var(--color-primary); border-color: rgba(201,146,26,0.4); }
+
+        /* Form panel */
+        .contact-form-panel {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 40px 36px;
+            box-shadow: 0 4px 24px rgba(26,16,64,0.07);
+        }
+        .contact-form-panel h2 { font-size: var(--f7); color: var(--color-dark); margin-bottom: 8px; }
+        .contact-form-panel > p { font-size: 14px; color: var(--color-text-mid); margin-bottom: 32px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--color-border);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--color-dark);
+            background: var(--color-bg-2);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(201,146,26,0.12);
+            background: #fff;
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-group select { appearance: none; cursor: pointer; }
+
+        .form-submit-row { margin-top: 8px; }
+        .form-submit-row .btn-solid { width: 100%; padding: 15px; font-size: 16px; border: none; cursor: pointer; }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .form-success .success-icon { font-size: 48px; margin-bottom: 16px; }
+        .form-success h3 { font-size: var(--f6); color: var(--color-dark); margin-bottom: 8px; }
+        .form-success p { font-size: 15px; color: var(--color-text-mid); }
+
+        /* Map strip */
+        .map-strip {
+            background: var(--color-bg-2);
+            padding: 64px 0;
+            border-top: 1px solid var(--color-border);
+        }
+        .map-strip h2 { font-size: var(--f7); color: var(--color-dark); margin-bottom: 8px; }
+        .map-strip p { font-size: 15px; color: var(--color-text-mid); margin-bottom: 32px; }
+        .map-frame {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(26,16,64,0.1);
+            border: 1px solid var(--color-border);
+        }
+        .map-frame iframe { display: block; width: 100%; height: 400px; border: none; }
+
+        /* Hours table */
+        .hours-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .hours-table td { padding: 6px 0; font-size: 14px; color: rgba(255,255,255,0.7); }
+        .hours-table td:last-child { text-align: right; color: rgba(255,255,255,0.9); }
+        .hours-table tr.today td { color: var(--color-primary); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="t-announce">
+    <span>Free consultation on all custom orders</span>
+    <span class="sep">|</span>
+    <a href="tel:6124540549">Call (612) 454-0549</a>
+    <span class="sep">|</span>
+    <span>Mon–Fri 8AM–5PM &nbsp;·&nbsp; Minneapolis, MN</span>
+</div>
+<header class="t-header">
+    <div class="t-header-inner">
+        <nav><ul class="t-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="services.html">Additional Services</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul></nav>
+        <a href="index.html" class="t-logo">
+            <img src="1341logo1.png" alt="1341 Floral Designs">
+        </a>
+        <div class="t-header-right">
+            <button class="t-nav-toggle" id="nav-toggle">&#9776;</button>
+            <a href="contact.html" class="t-cta">Order Now</a>
+        </div>
+    </div>
+</header>
+<nav class="t-mobile-nav" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html">Shop Online</a>
+    <a href="services.html">Additional Services</a>
+    <a href="contact.html" class="active">Contact</a>
+</nav>
+
+<!-- ─── Hero ─── -->
+<div class="contact-hero">
+    <div class="page-hero-swirl swirl-1"></div>
+    <div class="page-hero-swirl swirl-2"></div>
+    <div class="page-hero-swirl swirl-3"></div>
+    <div class="wrap contact-hero-content">
+        <p class="hero-eyebrow">We're Here to Help</p>
+        <h1>Get in Touch</h1>
+        <p>Have a question or ready to order? Reach out and we'll get back to you quickly.</p>
+    </div>
+</div>
+
+<!-- ─── Contact Section ─── -->
+<section class="section" style="padding: 72px 0;">
+    <div class="wrap">
+        <div class="contact-grid">
+
+            <!-- Info Panel -->
+            <div class="contact-info-panel">
+                <h2>Contact Information</h2>
+                <p>Reach us by phone, email, or fill out the form — we respond fast.</p>
+
+                <div class="info-item">
+                    <div class="info-icon">📞</div>
+                    <div class="info-item-text">
+                        <strong>Phone</strong>
+                        <a href="tel:6124540549">(612) 454-0549</a>
+                        <span>Call or text anytime during business hours</span>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">✉️</div>
+                    <div class="info-item-text">
+                        <strong>Email</strong>
+                        <a href="mailto:1341floraldesigns@gmail.com">1341floraldesigns@gmail.com</a>
+                        <span>We reply within a few hours</span>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-item-text">
+                        <strong>Location</strong>
+                        <span>Minneapolis, Minnesota</span>
+                        <span>Serving the greater Twin Cities area</span>
+                    </div>
+                </div>
+
+                <hr class="info-divider">
+
+                <div class="info-item" style="margin-bottom: 0;">
+                    <div class="info-icon">🕐</div>
+                    <div class="info-item-text">
+                        <strong>Business Hours</strong>
+                        <table class="hours-table">
+                            <tr><td>Monday – Friday</td><td>8:00 AM – 5:00 PM</td></tr>
+                            <tr><td>Saturday</td><td>By Appointment</td></tr>
+                            <tr><td>Sunday</td><td>Closed</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <hr class="info-divider">
+
+                <p style="font-size:13px; color:rgba(255,255,255,0.5); margin-bottom: 14px; font-family: var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">Follow Us</p>
+                <div class="social-row">
+                    <a href="#" class="social-pill">📘 Facebook</a>
+                    <a href="#" class="social-pill">📸 Instagram</a>
+                </div>
+            </div>
+
+            <!-- Form Panel -->
+            <div class="contact-form-panel">
+                <h2>Send Us a Message</h2>
+                <p>Fill in your details below and we'll be in touch to discuss your order.</p>
+
+                <form id="contact-form" onsubmit="handleContactForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fname">First Name *</label>
+                            <input type="text" id="fname" name="fname" placeholder="Jane" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Last Name *</label>
+                            <input type="text" id="lname" name="lname" placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" placeholder="jane@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="(612) 000-0000">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">What Are You Interested In? *</label>
+                        <select id="service" name="service" required>
+                            <option value="" disabled selected>Select a service…</option>
+                            <option>Funeral Flowers</option>
+                            <option>Sympathy Arrangements</option>
+                            <option>Custom Bridal / Wedding</option>
+                            <option>Event Centerpieces</option>
+                            <option>Birthday Arrangement</option>
+                            <option>Get Well Soon</option>
+                            <option>Everyday Bouquet</option>
+                            <option>Plant &amp; Gift Basket</option>
+                            <option>Corporate / Recurring Order</option>
+                            <option>Other / Not Sure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Desired Date (if applicable)</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budget">Approximate Budget</label>
+                        <select id="budget" name="budget">
+                            <option value="" disabled selected>Select a range…</option>
+                            <option>Under $50</option>
+                            <option>$50 – $100</option>
+                            <option>$100 – $200</option>
+                            <option>$200 – $500</option>
+                            <option>$500+</option>
+                            <option>Flexible / Not sure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message / Details *</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your occasion, color preferences, any special requests…" required></textarea>
+                    </div>
+
+                    <div class="form-submit-row">
+                        <button type="submit" class="btn btn-solid">Send Message &rarr;</button>
+                    </div>
+                </form>
+
+                <div class="form-success" id="form-success">
+                    <div class="success-icon">🌸</div>
+                    <h3>Message Received!</h3>
+                    <p>Thank you for reaching out. Everett will get back to you within a few hours.</p>
+                    <p style="margin-top:8px;">Or call us directly: <a href="tel:6124540549" style="color:var(--color-primary);">(612) 454-0549</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ─── Map ─── -->
+<div class="map-strip">
+    <div class="wrap" style="text-align:center;">
+        <p class="hero-eyebrow" style="color:var(--color-primary); font-family:var(--font-body); font-size:12px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; display:block; margin-bottom:12px;">Find Us</p>
+        <h2>Serving Minneapolis &amp; the Twin Cities</h2>
+        <p>We deliver throughout the greater Minneapolis area. Contact us for delivery availability to your address.</p>
+        <div class="map-frame">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d91015.41897497584!2d-93.33259544248862!3d44.97997012241432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x52b333909377bbff%3A0x1a17ffe67a4d824a!2sMinneapolis%2C%20MN!5e0!3m2!1sen!2sus!4v1712000000000!5m2!1sen!2sus"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<!-- ─── CTA Banner ─── -->
+<div class="cta-banner">
+    <div class="wrap">
+        <h2>Need Flowers Fast?</h2>
+        <p>Call us directly for same-day service. We'll do our best to help.</p>
+        <a href="tel:6124540549" class="btn btn-dark">&#9990; Call (612) 454-0549</a>
+    </div>
+</div>
+
+<!-- ─── Newsletter ─── -->
+<div class="newsletter">
+    <div class="wrap">
+        <h2>Stay in the Loop</h2>
+        <p>Seasonal specials, floral tips, and updates — straight to your inbox.</p>
+        <form class="nl-form" onsubmit="handleNewsletter(event)">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+<footer class="t-footer">
+    <div class="t-footer-grid">
+        <div>
+            <div class="t-footer-logo-num">1341</div>
+            <div class="t-footer-logo-sub">Floral Designs</div>
+            <p class="t-footer-about">Locally owned and operated in Minneapolis, Minnesota. Bold, handcrafted floral designs for every occasion.</p>
+            <p style="font-size:11px;color:rgba(255,255,255,0.12);margin-top:12px;">Owner: Everett Bryant</p>
+        </div>
+        <div class="t-footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#reviews">Reviews</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="shop.html">Shop Online</a></li>
+                <li><a href="services.html">Additional Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="t-footer-col">
+            <h4>Contact Us</h4>
+            <div class="t-footer-contact-item"><span class="ico">📞</span><a href="tel:6124540549">(612) 454-0549</a></div>
+            <div class="t-footer-contact-item"><span class="ico">✉️</span><a href="mailto:1341floraldesigns@gmail.com">1341floraldesigns@gmail.com</a></div>
+            <div class="t-footer-contact-item"><span class="ico">📍</span><span>Minneapolis, MN</span></div>
+            <div class="t-footer-contact-item"><span class="ico">🕐</span><span>Mon–Fri: 8AM – 5PM</span></div>
+        </div>
+    </div>
+    <div class="t-footer-bottom">
+        <span>&copy; 2025 1341 Floral Designs. All rights reserved.</span>
+        <span>Minneapolis, Minnesota</span>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+        document.getElementById('mobile-nav').classList.toggle('open');
+    });
+
+    function handleContactForm(e) {
+        e.preventDefault();
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+    }
+
+    function handleNewsletter(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.textContent = '✓ Subscribed!';
+        btn.style.background = '#2e7d32';
+        setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; e.target.reset(); }, 3000);
+    }
+</script>
+<script src="polish.js"></script>
+</body>
+</html>

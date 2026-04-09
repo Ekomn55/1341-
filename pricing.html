@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | 1341 Floral Designs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+        /* ── Page hero ── */
+        .p-hero {
+            padding: 80px 48px 72px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .p-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(160,100,255,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(200,75,17,0.10) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(30,128,128,0.14) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .p-hero-content { position: relative; z-index: 1; }
+        .p-eyebrow {
+            font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
+            color: #1E8080; display: block; margin-bottom: 14px;
+        }
+        .p-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 400; font-style: italic;
+            color: #fff; line-height: 1.15; margin-bottom: 16px;
+        }
+        .p-hero p { font-size: 16px; color: rgba(255,255,255,0.5); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+        /* ── Tab nav ── */
+        .p-tabs {
+            display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+            padding: 28px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            position: sticky; top: 80px; z-index: 50;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(12px);
+        }
+        .p-tab {
+            padding: 9px 22px;
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 9999px;
+            font-family: 'Jost', sans-serif;
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            background: none; cursor: pointer;
+            transition: all .2s; text-decoration: none; display: inline-block;
+        }
+        .p-tab:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+        .p-tab.active { background: #1E8080; border-color: #1E8080; color: #fff; }
+
+        /* ── Main layout ── */
+        .p-body {
+            max-width: 1100px; margin: 0 auto;
+            padding: 64px 48px 80px;
+        }
+
+        /* ── Bundle deal card ── */
+        .bundle-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 56px;
+            background: linear-gradient(135deg, #1a0a00 0%, #2d1200 50%, #1a0820 100%);
+            border: 1px solid rgba(200,75,17,0.35);
+            box-shadow: 0 8px 40px rgba(200,75,17,0.2);
+        }
+        .bundle-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 80% 50%, rgba(200,75,17,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .bundle-badge {
+            position: absolute; top: 20px; right: 20px;
+            background: #BE5103;
+            color: #fff;
+            font-size: 10px; font-weight: 700;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            padding: 6px 14px; border-radius: 9999px;
+        }
+        .bundle-inner {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 32px;
+            align-items: center;
+            padding: 40px 40px;
+            position: relative; z-index: 1;
+        }
+        .bundle-tag {
+            font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #BE5103; display: block; margin-bottom: 10px;
+        }
+        .bundle-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            color: #fff; font-weight: 400; margin-bottom: 12px; line-height: 1.2;
+        }
+        .bundle-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 480px; }
+        .bundle-items {
+            display: flex; flex-direction: column; gap: 8px;
+            margin-top: 18px;
+        }
+        .bundle-item {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13.5px; color: rgba(255,255,255,0.7);
+        }
+        .bundle-item::before {
+            content: '✓';
+            width: 20px; height: 20px; border-radius: 50%;
+            background: rgba(200,75,17,0.2); border: 1px solid rgba(200,75,17,0.4);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: #BE5103; flex-shrink: 0;
+            line-height: 20px; text-align: center;
+        }
+        .bundle-price-box {
+            text-align: center; flex-shrink: 0;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 28px 32px;
+        }
+        .bundle-was {
+            font-size: 12px; color: rgba(255,255,255,0.3);
+            text-decoration: line-through; margin-bottom: 4px;
+        }
+        .bundle-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem; font-weight: 700;
+            color: #fff; line-height: 1;
+        }
+        .bundle-per { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 4px; letter-spacing: 0.08em; }
+        .bundle-save {
+            margin-top: 10px;
+            background: rgba(200,75,17,0.18);
+            border: 1px solid rgba(200,75,17,0.3);
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 11px; font-weight: 700;
+            color: #BE5103; letter-spacing: 0.06em;
+        }
+        .bundle-cta {
+            margin-top: 28px;
+            display: flex; gap: 12px; flex-wrap: wrap;
+        }
+        .btn-bundle {
+            background: #BE5103; color: #fff;
+            border: none; border-radius: 9999px;
+            padding: 13px 28px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: opacity .2s;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-bundle:hover { opacity: 0.85; color: #fff; }
+        .btn-bundle-ghost {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 9999px;
+            padding: 13px 28px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px; font-weight: 600; color: #fff;
+            cursor: pointer; transition: all .2s;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-bundle-ghost:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
+
+        /* ── Section headers ── */
+        .p-section { margin-bottom: 56px; scroll-margin-top: 140px; }
+        .p-section-head {
+            display: flex; align-items: center; gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(30,128,128,0.25);
+        }
+        .p-section-icon { font-size: 28px; }
+        .p-section-head h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem; font-weight: 400; color: #fff;
+        }
+        .p-section-head p { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+        /* ── Card grid ── */
+        .p-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .p-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px;
+            padding: 22px 20px;
+            transition: border-color .2s, background .2s;
+        }
+        .p-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+        .p-card-name { font-size: 14.5px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+        .p-card-note { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; margin-bottom: 14px; }
+        .p-card-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem; font-weight: 700; color: #1E8080;
+        }
+        .p-card.featured {
+            border-color: rgba(30,128,128,0.3);
+            background: rgba(30,128,128,0.05);
+        }
+        .p-card.featured .p-card-price { color: #2aa8a8; }
+
+        /* ── Delivery box ── */
+        .p-delivery {
+            display: flex; gap: 20px; align-items: flex-start;
+            background: rgba(30,128,128,0.05);
+            border: 1px solid rgba(30,128,128,0.2);
+            border-radius: 10px; padding: 28px 28px;
+            margin-top: 16px;
+        }
+        .p-delivery-icon { font-size: 28px; flex-shrink: 0; }
+        .p-delivery strong { display: block; font-size: 15px; color: #fff; margin-bottom: 6px; }
+        .p-delivery p { font-size: 13.5px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+        .p-delivery a { color: #1E8080; }
+
+        /* ── CTA strip ── */
+        .p-cta {
+            text-align: center;
+            padding: 72px 48px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            position: relative; overflow: hidden;
+        }
+        .p-cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 100%, rgba(30,128,128,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 100%, rgba(200,75,17,0.10) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .p-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            font-style: italic; color: #fff; margin-bottom: 14px;
+            position: relative; z-index: 1;
+        }
+        .p-cta p { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 32px; position: relative; z-index: 1; }
+        .p-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+        @media (max-width: 700px) {
+            .p-body { padding: 40px 20px 60px; }
+            .p-hero { padding: 60px 24px 50px; }
+            .bundle-inner { grid-template-columns: 1fr; }
+            .bundle-price-box { padding: 20px 24px; }
+            .p-card-grid { grid-template-columns: 1fr 1fr; }
+            .p-tabs { top: 0; }
+        }
+        @media (max-width: 460px) {
+            .p-card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="t-announce">
+    <span>Free consultation on all custom orders</span>
+    <span class="sep">|</span>
+    <a href="tel:6124540549">Call (612) 454-0549</a>
+    <span class="sep">|</span>
+    <span>Mon–Fri 8AM–5PM &nbsp;·&nbsp; Minneapolis, MN</span>
+</div>
+
+<header class="t-header">
+    <div class="t-header-inner">
+        <nav><ul class="t-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pricing.html" class="active">Pricing</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="services.html">Additional Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul></nav>
+        <a href="index.html" class="t-logo">
+            <img src="1341logo1.png" alt="1341 Floral Designs">
+        </a>
+        <div class="t-header-right">
+            <button class="t-nav-toggle" id="nav-toggle">&#9776;</button>
+            <a href="contact.html" class="t-cta">Order Now</a>
+        </div>
+    </div>
+</header>
+<nav class="t-mobile-nav" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html">Shop Online</a>
+    <a href="services.html">Additional Services</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<!-- Hero -->
+<div class="p-hero">
+    <div class="p-hero-content">
+        <span class="p-eyebrow">Transparent &amp; Simple</span>
+        <h1>Our Pricing</h1>
+        <p>Every arrangement is handcrafted with care. Starting prices listed below — contact us for a custom quote.</p>
+    </div>
+</div>
+
+<!-- Tab nav -->
+<div class="p-tabs">
+    <a href="#funeral" class="p-tab active">🕊️ Funeral</a>
+    <a href="#everyday" class="p-tab">💐 Everyday</a>
+    <a href="#special" class="p-tab">🎨 Special Orders</a>
+    <a href="#bundle" class="p-tab">🎁 Bundle Deal</a>
+</div>
+
+<!-- Body -->
+<div class="p-body">
+
+    <!-- ══ FUNERAL FLOWERS ══ -->
+    <div class="p-section" id="funeral">
+        <div class="p-section-head">
+            <span class="p-section-icon">🕊️</span>
+            <div>
+                <h2>Funeral Flowers</h2>
+                <p>Dignified, compassionate tributes crafted to honor and celebrate a life.</p>
+            </div>
+        </div>
+        <div class="p-card-grid">
+            <div class="p-card">
+                <div class="p-card-name">Standing Spray</div>
+                <div class="p-card-note">Large floor display, seasonal blooms</div>
+                <div class="p-card-price">From $175</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Casket Spray (Half)</div>
+                <div class="p-card-note">Half-lid arrangement, mixed florals</div>
+                <div class="p-card-price">From $175</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Casket Spray (Full)</div>
+                <div class="p-card-note">Full-lid arrangement, premium blooms</div>
+                <div class="p-card-price">From $250</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Funeral Wreath</div>
+                <div class="p-card-note">Round wreath on stand</div>
+                <div class="p-card-price">From $120</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Sympathy Bouquet</div>
+                <div class="p-card-note">Hand-tied, deliverable arrangement</div>
+                <div class="p-card-price">From $65</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Urn Arrangement</div>
+                <div class="p-card-note">For graveside or chapel display</div>
+                <div class="p-card-price">From $85</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Pall Bearer Boutonnieres</div>
+                <div class="p-card-note">Simple white or coordinated blooms</div>
+                <div class="p-card-price">From $12 each</div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <a href="contact.html" class="btn-bundle">Request Funeral Flowers</a>
+        </div>
+    </div>
+
+    <!-- ══ BUNDLE DEAL ══ -->
+    <div class="p-section" id="bundle">
+        <div class="bundle-card">
+            <div class="bundle-badge">🔥 Limited Deal</div>
+            <div class="bundle-inner">
+                <div>
+                    <span class="bundle-tag">Funeral Bundle · Best Value</span>
+                    <h2 class="bundle-title">2 Standing Sprays &amp; 1 Casket Spray<br>for $500</h2>
+                    <p class="bundle-desc">
+                        Honor your loved one with a complete floral tribute. Our funeral bundle gives families everything they need at a price that eases the burden during a difficult time.
+                    </p>
+                    <div class="bundle-items">
+                        <div class="bundle-item">2 Standing Sprays (valued at $175 each)</div>
+                        <div class="bundle-item">1 Casket Spray (valued at $250)</div>
+                        <div class="bundle-item">Free color &amp; flower consultation included</div>
+                        <div class="bundle-item">Coordinated design across all 3 pieces</div>
+                    </div>
+                    <div class="bundle-cta">
+                        <a href="contact.html?bundle=funeral" class="btn-bundle">Claim This Deal</a>
+                        <a href="tel:6124540549" class="btn-bundle-ghost">Call to Book</a>
+                    </div>
+                </div>
+                <div class="bundle-price-box">
+                    <div class="bundle-was">Value $600</div>
+                    <div class="bundle-price">$500</div>
+                    <div class="bundle-per">3 ARRANGEMENTS</div>
+                    <div class="bundle-save">You Save $100</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ EVERYDAY ARRANGEMENTS ══ -->
+    <div class="p-section" id="everyday">
+        <div class="p-section-head">
+            <span class="p-section-icon">💐</span>
+            <div>
+                <h2>Everyday Arrangements</h2>
+                <p>Beautiful flowers for every budget — we never compromise on quality or care.</p>
+            </div>
+        </div>
+        <div class="p-card-grid">
+            <div class="p-card featured">
+                <div class="p-card-name">Mini Bouquet</div>
+                <div class="p-card-note">Perfect small gift or desk arrangement</div>
+                <div class="p-card-price">From $30</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Seasonal Mixed Bouquet</div>
+                <div class="p-card-note">Fresh seasonal blooms, hand-tied</div>
+                <div class="p-card-price">From $45</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Simple Rose Bouquet</div>
+                <div class="p-card-note">Classic roses, 6–12 stems</div>
+                <div class="p-card-price">From $50</div>
+            </div>
+            <div class="p-card featured">
+                <div class="p-card-name">Value Arrangement</div>
+                <div class="p-card-note">Our best value — seasonal flowers in a vase</div>
+                <div class="p-card-price">From $55</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Get Well Soon</div>
+                <div class="p-card-note">Bright, cheerful blooms</div>
+                <div class="p-card-price">From $50</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Birthday Arrangement</div>
+                <div class="p-card-note">Colorful mixed florals in a vase</div>
+                <div class="p-card-price">From $55</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Thank You Bouquet</div>
+                <div class="p-card-note">Simple, elegant arrangement</div>
+                <div class="p-card-price">From $45</div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <a href="contact.html" class="btn-bundle">Order an Arrangement</a>
+        </div>
+    </div>
+
+    <!-- ══ SPECIAL ORDERS ══ -->
+    <div class="p-section" id="special">
+        <div class="p-section-head">
+            <span class="p-section-icon">🎨</span>
+            <div>
+                <h2>Special Orders</h2>
+                <p>Fully custom designs for events, milestones, and unique occasions.</p>
+            </div>
+        </div>
+        <div class="p-card-grid">
+            <div class="p-card">
+                <div class="p-card-name">Custom Bridal Bouquet</div>
+                <div class="p-card-note">Fully custom, your colors &amp; style</div>
+                <div class="p-card-price">From $150</div>
+            </div>
+            <div class="p-card featured">
+                <div class="p-card-name">Event Centerpiece</div>
+                <div class="p-card-note">Per table, custom designed</div>
+                <div class="p-card-price">From $40</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Corporate Order</div>
+                <div class="p-card-note">Lobby, event &amp; recurring arrangements</div>
+                <div class="p-card-price">Custom Quote</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Luxury Gift Basket</div>
+                <div class="p-card-note">Flowers, plants, and curated gifts</div>
+                <div class="p-card-price">From $95</div>
+            </div>
+            <div class="p-card featured">
+                <div class="p-card-name">Anniversary Arrangement</div>
+                <div class="p-card-note">Romantic, premium blooms</div>
+                <div class="p-card-price">From $85</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Holiday Special</div>
+                <div class="p-card-note">Seasonal holiday designs</div>
+                <div class="p-card-price">From $70</div>
+            </div>
+            <div class="p-card">
+                <div class="p-card-name">Fully Custom Design</div>
+                <div class="p-card-note">Any vision, any occasion — we'll make it happen</div>
+                <div class="p-card-price">Contact Us</div>
+            </div>
+        </div>
+        <div style="margin-top:20px;">
+            <a href="contact.html" class="btn-bundle">Start Your Custom Order</a>
+        </div>
+    </div>
+
+    <!-- Delivery -->
+    <div class="p-delivery">
+        <div class="p-delivery-icon">🚚</div>
+        <div>
+            <strong>Delivery Fee</strong>
+            <p>Local Minneapolis delivery starts at <strong style="color:#fff;">$15</strong>. Next-day delivery available on standard orders. Emergency same-day service available — call us directly at <a href="tel:6124540549">(612) 454-0549</a>.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- CTA -->
+<div class="p-cta">
+    <h2>Not Sure What You Need?</h2>
+    <p>Call or message us and we'll help you find the perfect arrangement at the right price.</p>
+    <div class="p-cta-btns">
+        <a href="contact.html" class="btn-bundle">Get a Free Quote</a>
+        <a href="tel:6124540549" class="btn-bundle-ghost">Call (612) 454-0549</a>
+    </div>
+</div>
+
+<footer class="t-footer">
+    <div class="t-footer-grid">
+        <div>
+            <div class="t-footer-logo-num">1341</div>
+            <div class="t-footer-logo-sub">Floral Designs</div>
+            <p class="t-footer-about">Locally owned and operated in Minneapolis, Minnesota. Bold, handcrafted floral designs for every occasion.</p>
+            <p style="font-size:11px;color:rgba(255,255,255,0.12);margin-top:12px;">Owner: Everett Bryant</p>
+        </div>
+        <div class="t-footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#reviews">Reviews</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="shop.html">Shop Online</a></li>
+                <li><a href="services.html">Additional Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="t-footer-col">
+            <h4>Contact Us</h4>
+            <div class="t-footer-contact-item"><span class="ico">📞</span><a href="tel:6124540549">(612) 454-0549</a></div>
+            <div class="t-footer-contact-item"><span class="ico">✉️</span><a href="mailto:1341floraldesigns@gmail.com">1341floraldesigns@gmail.com</a></div>
+            <div class="t-footer-contact-item"><span class="ico">📍</span><span>Minneapolis, MN</span></div>
+            <div class="t-footer-contact-item"><span class="ico">🕐</span><span>Mon–Fri: 8AM – 5PM</span></div>
+        </div>
+    </div>
+    <div class="t-footer-bottom">
+        <span>&copy; 2025 1341 Floral Designs. All rights reserved.</span>
+        <span>Minneapolis, Minnesota</span>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+        document.getElementById('mobile-nav').classList.toggle('open');
+    });
+
+    // Highlight active tab on scroll
+    const tabs = document.querySelectorAll('.p-tab');
+    const sections = ['funeral','bundle','everyday','special'];
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 160) current = id;
+        });
+        tabs.forEach(t => {
+            t.classList.toggle('active', t.getAttribute('href') === '#' + current);
+        });
+    });
+</script>
+<script src="polish.js"></script>
+</body>
+</html>

@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | 1341 Floral Designs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="extras.css">
+    <link rel="stylesheet" href="theme.css">
+    <style>
+    /* ═══ SHOP PAGE ═══ */
+    .shop-hero {
+        background: linear-gradient(135deg, #1a1040 0%, #2b1a60 60%, #3a1060 100%);
+        padding: 80px 0 56px; text-align: center; position: relative; overflow: hidden;
+    }
+    .shop-hero-content { position: relative; z-index: 1; }
+    .shop-hero .eyebrow {
+        font-family: var(--font-body); font-size: 11px; font-weight: 700;
+        letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-primary);
+        display: block; margin-bottom: 12px;
+    }
+    .shop-hero h1 { font-size: var(--f9); color: #fff; margin-bottom: 12px; }
+    .shop-hero p { font-size: var(--f4); color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto; line-height: 1.65; }
+
+    /* ═══ CATEGORY TABS ═══ */
+    .cat-tabs {
+        background: #fff; border-bottom: 1px solid var(--color-border);
+        display: flex; align-items: center; justify-content: center;
+        gap: 8px; padding: 18px 24px; flex-wrap: wrap;
+        position: sticky; top: 0; z-index: 50;
+        box-shadow: 0 2px 8px rgba(26,16,64,0.06);
+    }
+    .cat-tab {
+        font-family: var(--font-body); font-size: 11px; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        padding: 8px 20px; border: 1.5px solid rgba(26,16,64,0.18);
+        background: none; cursor: pointer; color: rgba(26,16,64,0.55);
+        transition: all .2s; border-radius: 100px;
+    }
+    .cat-tab:hover { border-color: var(--color-dark); color: var(--color-dark); }
+    .cat-tab.active { background: var(--color-dark); color: #fff; border-color: var(--color-dark); }
+
+    /* ═══ PRODUCT GRID ═══ */
+    .product-section { padding: 56px 0 16px; }
+    .product-section-title {
+        font-size: var(--f6); color: var(--color-dark); margin-bottom: 6px;
+    }
+    .product-section-sub { font-size: var(--f3); color: var(--color-text-mid); margin-bottom: 32px; }
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+    }
+    .product-card {
+        background: #fff; border: 1px solid var(--color-border);
+        border-radius: 8px; overflow: hidden;
+        box-shadow: 0 2px 12px rgba(26,16,64,0.06);
+        transition: box-shadow .2s, transform .2s;
+        display: flex; flex-direction: column;
+    }
+    .product-card:hover { box-shadow: 0 6px 24px rgba(26,16,64,0.12); transform: translateY(-2px); }
+    .product-card-img {
+        aspect-ratio: 3/4; overflow: hidden; background: var(--color-bg-2); position: relative;
+    }
+    .product-card-img img {
+        width: 100%; height: 100%; object-fit: contain;
+        background: var(--color-bg-2);
+        transition: transform .4s ease;
+    }
+    .product-card:hover .product-card-img img { transform: scale(1.05); }
+    .product-badge {
+        position: absolute; top: 10px; left: 10px;
+        background: var(--color-primary); color: #fff;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+    }
+    .product-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .product-vendor { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-light); margin-bottom: 4px; }
+    .product-name { font-family: var(--font-heading); font-size: 17px; color: var(--color-dark); margin-bottom: 6px; line-height: 1.25; }
+    .product-desc { font-size: 12px; color: var(--color-text-mid); line-height: 1.5; margin-bottom: 12px; flex: 1; }
+    .product-price { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--color-primary); margin-bottom: 12px; }
+    .product-price span { font-size: 12px; font-family: var(--font-body); color: var(--color-text-light); font-weight: 400; }
+    .btn-atc {
+        width: 100%; padding: 11px; font-family: var(--font-body); font-size: 12px; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: none;
+        background: var(--color-dark); color: #fff; border-radius: 4px; transition: background .2s;
+    }
+    .btn-atc:hover { background: var(--color-primary); }
+
+    .no-products { text-align: center; padding: 64px 0; color: var(--color-text-light); font-size: var(--f4); }
+
+    /* ═══ CART DRAWER ═══ */
+    .cart-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(10,6,30,0.5); z-index: 500; backdrop-filter: blur(2px);
+    }
+    .cart-overlay.open { display: block; }
+    .cart-drawer {
+        position: fixed; top: 0; right: -440px; width: 440px; max-width: 100vw;
+        height: 100vh; background: #fff; z-index: 501;
+        display: flex; flex-direction: column;
+        box-shadow: -4px 0 32px rgba(26,16,64,0.15);
+        transition: right .3s cubic-bezier(.4,0,.2,1);
+    }
+    .cart-drawer.open { right: 0; }
+    .cart-drawer-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 20px 24px; border-bottom: 1px solid var(--color-border);
+        background: linear-gradient(135deg, #1a1040, #2b1a60);
+    }
+    .cart-drawer-head h2 { font-size: var(--f5); color: #fff; display: flex; align-items: center; gap: 8px; }
+    .cart-count-pill {
+        background: var(--color-primary); color: #fff; font-size: 12px; font-weight: 700;
+        border-radius: 100px; padding: 2px 8px; font-family: var(--font-body);
+    }
+    .cart-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+    .cart-close:hover { color: #fff; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .cart-empty { text-align: center; padding: 48px 0; color: var(--color-text-light); }
+    .cart-empty span { font-size: 48px; display: block; margin-bottom: 12px; }
+    .cart-item {
+        display: grid; grid-template-columns: 72px 1fr auto;
+        gap: 12px; align-items: start;
+        padding: 14px 0; border-bottom: 1px solid var(--color-hairline);
+    }
+    .cart-item-img { width: 72px; height: 72px; object-fit: contain; border-radius: 4px; background: var(--color-bg-2); }
+    .cart-item-info {}
+    .cart-item-name { font-family: var(--font-heading); font-size: 15px; color: var(--color-dark); margin-bottom: 2px; }
+    .cart-item-cat { font-size: 11px; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .cart-qty { display: flex; align-items: center; gap: 8px; }
+    .cart-qty button {
+        width: 26px; height: 26px; border-radius: 50%;
+        border: 1.5px solid var(--color-border); background: none;
+        font-size: 16px; cursor: pointer; line-height: 1; color: var(--color-dark);
+        display: flex; align-items: center; justify-content: center;
+        transition: border-color .15s, background .15s;
+    }
+    .cart-qty button:hover { border-color: var(--color-primary); background: rgba(201,146,26,0.08); }
+    .cart-qty span { font-size: 15px; font-weight: 600; min-width: 20px; text-align: center; }
+    .cart-item-price { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--color-primary); white-space: nowrap; }
+    .cart-totals {
+        padding: 16px 24px; border-top: 1px solid var(--color-border);
+        background: var(--color-bg-2);
+    }
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--color-text-mid); margin-bottom: 6px; }
+    .cart-total-row.big { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--color-dark); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--color-border); }
+    .cart-total-row.big span:last-child { color: var(--color-primary); }
+    .btn-checkout {
+        width: 100%; padding: 15px; margin-top: 14px;
+        font-family: var(--font-body); font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        background: linear-gradient(135deg, #e0a830 0%, #c9921a 50%, #a87614 100%);
+        color: #fff; border: none; border-radius: 6px; cursor: pointer;
+        box-shadow: 0 4px 15px rgba(201,146,26,0.35);
+        transition: box-shadow .2s;
+    }
+    .btn-checkout:hover { box-shadow: 0 6px 20px rgba(201,146,26,0.5); }
+    .btn-checkout:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ═══ CHECKOUT MODAL ═══ */
+    .modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(10,6,30,0.7); z-index: 600;
+        align-items: center; justify-content: center;
+        padding: 20px; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+        background: #fff; border-radius: 12px;
+        width: 100%; max-width: 660px; max-height: 90vh; overflow-y: auto;
+        box-shadow: 0 24px 64px rgba(26,16,64,0.3);
+    }
+    .modal-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 20px 28px; border-bottom: 1px solid var(--color-border);
+        background: linear-gradient(135deg, #1a1040, #2b1a60);
+        border-radius: 12px 12px 0 0; position: sticky; top: 0; z-index: 2;
+    }
+    .modal-head h2 { font-size: var(--f6); color: #fff; }
+    .modal-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.5rem; cursor: pointer; }
+    .modal-close:hover { color: #fff; }
+    .modal-body { padding: 28px; }
+    .modal-section { margin-bottom: 24px; }
+    .modal-section h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-light); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--color-hairline); }
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 500px) { .form-2col { grid-template-columns: 1fr; } }
+    .f-group { margin-bottom: 14px; }
+    .f-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-light); margin-bottom: 5px; }
+    .f-group input, .f-group select, .f-group textarea {
+        width: 100%; padding: 10px 12px; border: 1.5px solid var(--color-border);
+        border-radius: 5px; font-family: var(--font-body); font-size: 14px;
+        color: var(--color-dark); background: var(--color-bg-2);
+        box-sizing: border-box; transition: border-color .2s, box-shadow .2s;
+    }
+    .f-group input:focus, .f-group select:focus, .f-group textarea:focus {
+        outline: none; border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(201,146,26,0.1); background: #fff;
+    }
+    .f-group textarea { resize: vertical; min-height: 80px; }
+    .order-summary { background: var(--color-bg-2); border-radius: 6px; padding: 16px; margin-bottom: 20px; }
+    .order-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--color-text-mid); margin-bottom: 5px; }
+    .order-summary-row.total { font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--color-dark); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--color-border); }
+    .order-summary-row.total span:last-child { color: var(--color-primary); }
+    .submit-msg { text-align: center; padding: 6px; font-size: 13px; border-radius: 4px; margin-bottom: 12px; display: none; }
+    .submit-msg.error { background: #fff0f0; color: #c0392b; display: block; }
+    .submit-msg.loading { background: #f0f8ff; color: #1a6e9e; display: block; }
+    .success-screen { display: none; text-align: center; padding: 48px 24px; }
+    .success-screen .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-screen h3 { font-size: var(--f7); color: var(--color-dark); margin-bottom: 8px; }
+    .success-screen p { font-size: 15px; color: var(--color-text-mid); line-height: 1.6; }
+
+    /* ═══ ADMIN MODAL ═══ */
+    .admin-box { max-width: 820px; }
+    .admin-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--color-border); background: var(--color-bg-2); }
+    .admin-tab {
+        padding: 12px 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+        text-transform: uppercase; cursor: pointer; border: none; background: none;
+        color: var(--color-text-light); border-bottom: 2px solid transparent; transition: all .2s;
+    }
+    .admin-tab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); background: #fff; }
+    .admin-panel { display: none; padding: 24px; }
+    .admin-panel.active { display: block; }
+    .admin-product-list { display: grid; gap: 10px; max-height: 360px; overflow-y: auto; }
+    .admin-product-row {
+        display: grid; grid-template-columns: 48px 1fr auto auto; gap: 12px;
+        align-items: center; padding: 10px; background: var(--color-bg-2);
+        border-radius: 6px; border: 1px solid var(--color-border);
+    }
+    .admin-product-row img { width: 48px; height: 48px; object-fit: contain; border-radius: 4px; background: var(--color-bg-2); }
+    .admin-product-row-info .name { font-size: 14px; font-weight: 600; color: var(--color-dark); }
+    .admin-product-row-info .cat { font-size: 11px; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 0.07em; }
+    .admin-product-row .price { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--color-primary); }
+    .btn-del { background: none; border: 1.5px solid #e74c3c; color: #e74c3c; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: all .2s; }
+    .btn-del:hover { background: #e74c3c; color: #fff; }
+    .admin-orders-list { display: grid; gap: 10px; max-height: 400px; overflow-y: auto; }
+    .admin-order-row {
+        padding: 14px; background: var(--color-bg-2); border-radius: 6px;
+        border: 1px solid var(--color-border);
+    }
+    .admin-order-row .order-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .admin-order-row .order-num { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--color-dark); }
+    .admin-order-row .order-total { font-family: var(--font-heading); font-size: 15px; color: var(--color-primary); font-weight: 700; }
+    .admin-order-row .order-meta { font-size: 12px; color: var(--color-text-mid); }
+    .status-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 8px; border-radius: 100px; }
+    .status-pending { background: rgba(201,146,26,0.15); color: var(--color-primary); }
+    .status-confirmed { background: rgba(46,125,50,0.12); color: #2e7d32; }
+    .login-form { max-width: 340px; margin: 40px auto; text-align: center; }
+    .login-form h3 { font-size: var(--f6); color: var(--color-dark); margin-bottom: 8px; }
+    .login-form p { font-size: 14px; color: var(--color-text-mid); margin-bottom: 24px; }
+    .login-error { color: #c0392b; font-size: 13px; margin-bottom: 10px; display: none; }
+
+    /* ═══ NAV CART BUBBLE ═══ */
+    .cart-bubble-count {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--color-primary); color: #fff;
+        font-size: 10px; font-weight: 700;
+        width: 18px; height: 18px; border-radius: 50%;
+        vertical-align: super; margin-left: 2px;
+        font-family: var(--font-body);
+    }
+
+    @media (max-width: 700px) {
+        .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .cart-drawer { width: 100vw; }
+        .modal-body { padding: 16px; }
+    }
+
+    /* ═══ DARK THEME OVERRIDES ═══ */
+    /* Category tabs */
+    .cat-tabs {
+        background: #111 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.35) !important;
+    }
+    .cat-tab {
+        border-color: rgba(255,255,255,0.13) !important;
+        color: rgba(255,255,255,0.45) !important;
+    }
+    .cat-tab:hover { border-color: rgba(255,255,255,0.35) !important; color: #fff !important; }
+    .cat-tab.active { background: #1E8080 !important; border-color: #1E8080 !important; color: #fff !important; }
+
+    /* Product cards */
+    .product-card {
+        background: rgba(255,255,255,0.03) !important;
+        border: 1px solid rgba(255,255,255,0.07) !important;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.3) !important;
+        transition: border-color .2s, background .2s, transform .2s, box-shadow .2s !important;
+    }
+    .product-card:hover {
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+        border-color: rgba(30,128,128,0.35) !important;
+        background: rgba(30,128,128,0.05) !important;
+        transform: translateY(-3px) !important;
+    }
+    .product-card-img { background: rgba(255,255,255,0.03) !important; }
+    .product-card-img img { background: rgba(255,255,255,0.03) !important; }
+    .product-vendor { color: rgba(255,255,255,0.25) !important; }
+    .product-name { color: #fff !important; }
+    .product-desc { color: rgba(255,255,255,0.4) !important; }
+    .product-price { color: #1E8080 !important; }
+    .product-price span { color: rgba(255,255,255,0.3) !important; }
+    .product-badge { background: #BE5103 !important; }
+
+    /* Add to cart button */
+    .btn-atc {
+        background: #BE5103 !important;
+        border-radius: 6px !important;
+        font-size: 12px !important;
+        letter-spacing: 0.08em !important;
+        transition: background .2s, transform .15s !important;
+    }
+    .btn-atc:hover { background: #1E8080 !important; transform: none !important; }
+
+    /* Cart drawer */
+    .cart-drawer { background: #111 !important; }
+    .cart-items { background: #111 !important; }
+    .cart-item { border-bottom-color: rgba(255,255,255,0.05) !important; }
+    .cart-item-img { background: rgba(255,255,255,0.04) !important; }
+    .cart-item-name { color: #fff !important; }
+    .cart-item-cat { color: rgba(255,255,255,0.28) !important; }
+    .cart-qty button {
+        border-color: rgba(255,255,255,0.14) !important;
+        color: rgba(255,255,255,0.7) !important;
+        background: transparent !important;
+    }
+    .cart-qty button:hover { border-color: #1E8080 !important; background: rgba(30,128,128,0.1) !important; }
+    .cart-qty span { color: #fff !important; }
+    .cart-item-price { color: #1E8080 !important; }
+    .cart-totals {
+        background: rgba(255,255,255,0.025) !important;
+        border-top-color: rgba(255,255,255,0.07) !important;
+    }
+    .cart-total-row { color: rgba(255,255,255,0.4) !important; }
+    .cart-total-row.big { color: #fff !important; border-top-color: rgba(255,255,255,0.07) !important; }
+    .cart-total-row.big span:last-child { color: #1E8080 !important; }
+    .cart-empty { color: rgba(255,255,255,0.35) !important; }
+    .no-products { color: rgba(255,255,255,0.35) !important; }
+
+    /* Checkout button */
+    .btn-checkout {
+        background: linear-gradient(135deg, #2bb5b5 0%, #1E8080 50%, #176666 100%) !important;
+        box-shadow: 0 4px 16px rgba(30,128,128,0.4) !important;
+    }
+    .btn-checkout:hover { box-shadow: 0 6px 24px rgba(30,128,128,0.55) !important; }
+
+    /* Checkout modal */
+    .modal-box { background: #111 !important; }
+    .modal-section h3 {
+        color: rgba(255,255,255,0.28) !important;
+        border-bottom-color: rgba(255,255,255,0.06) !important;
+    }
+    .f-group label { color: rgba(255,255,255,0.35) !important; }
+    .f-group input, .f-group select, .f-group textarea {
+        background: rgba(255,255,255,0.04) !important;
+        border-color: rgba(255,255,255,0.09) !important;
+        color: #fff !important;
+    }
+    .f-group input:focus, .f-group select:focus, .f-group textarea:focus {
+        border-color: #1E8080 !important;
+        box-shadow: 0 0 0 3px rgba(30,128,128,0.15) !important;
+        background: rgba(255,255,255,0.06) !important;
+    }
+    .order-summary { background: rgba(255,255,255,0.03) !important; }
+    .order-summary-row { color: rgba(255,255,255,0.4) !important; }
+    .order-summary-row.total { color: #fff !important; border-top-color: rgba(255,255,255,0.07) !important; }
+    .order-summary-row.total span:last-child { color: #1E8080 !important; }
+    .success-screen h3 { color: #fff !important; }
+    .success-screen p { color: rgba(255,255,255,0.5) !important; }
+    .submit-msg.loading { background: rgba(30,128,128,0.1) !important; color: #2bb5b5 !important; }
+    .submit-msg.error { background: rgba(200,75,17,0.1) !important; color: #D46215 !important; }
+
+    /* Admin panel */
+    .admin-tabs { background: rgba(255,255,255,0.03) !important; border-color: rgba(255,255,255,0.07) !important; }
+    .admin-tab { color: rgba(255,255,255,0.35) !important; }
+    .admin-tab.active { color: #1E8080 !important; border-bottom-color: #1E8080 !important; background: transparent !important; }
+    .admin-product-row, .admin-order-row {
+        background: rgba(255,255,255,0.03) !important;
+        border-color: rgba(255,255,255,0.07) !important;
+    }
+    .admin-product-row-info .name { color: #fff !important; }
+    .admin-product-row-info .cat { color: rgba(255,255,255,0.28) !important; }
+    .admin-product-row .price { color: #1E8080 !important; }
+    .admin-order-row .order-num { color: #fff !important; }
+    .admin-order-row .order-total { color: #1E8080 !important; }
+    .admin-order-row .order-meta { color: rgba(255,255,255,0.35) !important; }
+    .login-form h3 { color: #fff !important; }
+    .login-form p { color: rgba(255,255,255,0.4) !important; }
+
+    /* ═══ PRODUCT DETAIL MODAL ═══ */
+    .product-modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.80); z-index: 700;
+        align-items: center; justify-content: center;
+        padding: 20px; backdrop-filter: blur(8px);
+    }
+    .product-modal-overlay.open { display: flex; }
+    .product-modal-box {
+        background: #111; border-radius: 14px;
+        width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto;
+        box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+        border: 1px solid rgba(255,255,255,0.07);
+        animation: pmIn .22s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes pmIn { from { opacity:0; transform:scale(.94) translateY(12px); } to { opacity:1; transform:none; } }
+    .product-modal-inner {
+        display: grid; grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 580px) { .product-modal-inner { grid-template-columns: 1fr; } }
+    .pm-photo {
+        background: #0a0a0a; border-radius: 13px 0 0 13px; overflow: hidden;
+        display: flex; align-items: center; justify-content: center; min-height: 340px;
+    }
+    .pm-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    @media (max-width: 580px) { .pm-photo { border-radius: 13px 13px 0 0; min-height: 220px; } }
+    .pm-info { padding: 28px 24px; display: flex; flex-direction: column; }
+    .pm-close-btn {
+        align-self: flex-end; background: none; border: none;
+        color: rgba(255,255,255,0.35); font-size: 1.6rem; cursor: pointer;
+        line-height: 1; padding: 0; margin-bottom: 10px; transition: color .15s;
+    }
+    .pm-close-btn:hover { color: #fff; }
+    .pm-category { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #1E8080; margin-bottom: 6px; }
+    .pm-name { font-family: var(--font-heading); font-size: 21px; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .pm-desc { font-size: 12.5px; color: rgba(255,255,255,0.4); line-height: 1.65; margin-bottom: 20px; flex: 1; }
+    .pm-size-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 8px; }
+    .pm-sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+    .pm-size-btn {
+        padding: 10px 4px; border: 1.5px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.03); border-radius: 8px;
+        cursor: pointer; text-align: center; transition: all .15s; color: rgba(255,255,255,0.5);
+    }
+    .pm-size-btn .size-name { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+    .pm-size-btn .size-price { display: block; font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: #1E8080; }
+    .pm-size-btn:hover { border-color: rgba(30,128,128,0.45); background: rgba(30,128,128,0.06); }
+    .pm-size-btn.selected { border-color: #1E8080 !important; background: rgba(30,128,128,0.13) !important; color: #fff !important; }
+    .pm-price-display { font-family: var(--font-heading); font-size: 30px; font-weight: 700; color: #1E8080; margin-bottom: 16px; }
+    .btn-pm-atc {
+        width: 100%; padding: 14px; font-family: var(--font-body); font-size: 12px; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: none;
+        background: #BE5103; color: #fff; border-radius: 8px; transition: background .2s;
+    }
+    .btn-pm-atc:hover { background: #1E8080; }
+    .product-card-img { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="t-announce">
+    <span>Free consultation on all custom orders</span>
+    <span class="sep">|</span>
+    <a href="tel:6124540549">Call (612) 454-0549</a>
+    <span class="sep">|</span>
+    <span>Mon–Fri 8AM–5PM &nbsp;·&nbsp; Minneapolis, MN</span>
+</div>
+<header class="t-header">
+    <div class="t-header-inner">
+        <nav><ul class="t-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="shop.html" class="active">Shop</a></li>
+            <li><a href="services.html">Additional Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul></nav>
+        <a href="index.html" class="t-logo" id="logo-click">
+            <img src="1341logo1.png" alt="1341 Floral Designs">
+        </a>
+        <div class="t-header-right">
+            <button class="t-nav-toggle" id="nav-toggle">&#9776;</button>
+            <button class="t-cta" onclick="openCart()">&#128717; Cart <span class="cart-bubble-count" id="cart-count">0</span></button>
+        </div>
+    </div>
+</header>
+<nav class="t-mobile-nav" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html" class="active">Shop Online</a>
+    <a href="services.html">Additional Services</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<!-- ─── Hero ─── -->
+<div class="shop-hero">
+    <div class="page-hero-swirl swirl-1"></div>
+    <div class="page-hero-swirl swirl-2"></div>
+    <div class="page-hero-swirl swirl-3"></div>
+    <div class="wrap shop-hero-content">
+        <span class="eyebrow">Handcrafted in Minneapolis, MN</span>
+        <h1>Order Online</h1>
+        <p>Browse our most popular arrangements. Add to cart and we'll confirm your order personally.</p>
+    </div>
+</div>
+
+<!-- ─── Category Tabs ─── -->
+<div class="cat-tabs">
+    <button class="cat-tab active" onclick="filterProducts('all', this)">All</button>
+    <button class="cat-tab" onclick="filterProducts('Best Sellers', this)">Best Sellers</button>
+    <button class="cat-tab" onclick="filterProducts('Birthday', this)">Birthday</button>
+    <button class="cat-tab" onclick="filterProducts('Sympathy', this)">Sympathy</button>
+    <button class="cat-tab" onclick="filterProducts('Luxury', this)">Luxury</button>
+</div>
+
+<!-- ─── Product Grid ─── -->
+<section class="section product-section">
+    <div class="wrap">
+        <div class="product-grid" id="product-grid">
+            <!-- Injected by JS -->
+        </div>
+        <p class="no-products" id="no-products" style="display:none;">No arrangements found in this category.</p>
+    </div>
+</section>
+
+<!-- ─── CTA Banner ─── -->
+<div class="cta-banner">
+    <div class="wrap">
+        <h2>Need Something Custom?</h2>
+        <p>Don't see exactly what you're looking for? We'll design it just for you.</p>
+        <a href="contact.html" class="btn btn-dark">Request a Custom Order</a>
+    </div>
+</div>
+
+<!-- ─── Newsletter ─── -->
+<div class="newsletter">
+    <div class="wrap">
+        <h2>Stay in the Loop</h2>
+        <p>Seasonal specials, floral tips, and updates — straight to your inbox.</p>
+        <form class="nl-form" onsubmit="handleNewsletter(event)">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+<footer class="t-footer">
+    <div class="t-footer-grid">
+        <div>
+            <div class="t-footer-logo-num">1341</div>
+            <div class="t-footer-logo-sub">Floral Designs</div>
+            <p class="t-footer-about">Locally owned and operated in Minneapolis, Minnesota. Bold, handcrafted floral designs for every occasion.</p>
+            <p style="font-size:11px;color:rgba(255,255,255,0.12);margin-top:12px;">Owner: Everett Bryant</p>
+        </div>
+        <div class="t-footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#reviews">Reviews</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="shop.html">Shop Online</a></li>
+                <li><a href="services.html">Additional Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="t-footer-col">
+            <h4>Contact Us</h4>
+            <div class="t-footer-contact-item"><span class="ico">📞</span><a href="tel:6124540549">(612) 454-0549</a></div>
+            <div class="t-footer-contact-item"><span class="ico">✉️</span><a href="mailto:1341floraldesigns@gmail.com">1341floraldesigns@gmail.com</a></div>
+            <div class="t-footer-contact-item"><span class="ico">📍</span><span>Minneapolis, MN</span></div>
+            <div class="t-footer-contact-item"><span class="ico">🕐</span><span>Mon–Fri: 8AM – 5PM</span></div>
+        </div>
+    </div>
+    <div class="t-footer-bottom">
+        <span>&copy; 2025 1341 Floral Designs. All rights reserved.</span>
+        <span>Minneapolis, Minnesota</span>
+    </div>
+</footer>
+
+<!-- ═══════════════════════════════════
+     PRODUCT DETAIL MODAL
+═══════════════════════════════════ -->
+<div class="product-modal-overlay" id="product-modal-overlay" onclick="handlePMOverlayClick(event)">
+    <div class="product-modal-box" id="product-modal-box">
+        <div class="product-modal-inner">
+            <div class="pm-photo">
+                <img id="pm-img" src="" alt="">
+            </div>
+            <div class="pm-info">
+                <button class="pm-close-btn" onclick="closeProductModal()">&times;</button>
+                <div class="pm-category" id="pm-category"></div>
+                <div class="pm-name" id="pm-name"></div>
+                <div class="pm-desc" id="pm-desc"></div>
+                <div class="pm-size-label">Choose Your Size</div>
+                <div class="pm-sizes" id="pm-sizes"></div>
+                <div class="pm-price-display" id="pm-price"></div>
+                <button class="btn-pm-atc" id="btn-pm-atc">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     CART DRAWER
+═══════════════════════════════════ -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-head">
+        <h2>&#128717; Your Cart <span class="cart-count-pill" id="drawer-count">0</span></h2>
+        <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items">
+        <div class="cart-empty" id="cart-empty">
+            <span>🌸</span>
+            <p>Your cart is empty</p>
+        </div>
+    </div>
+    <div class="cart-totals" id="cart-totals" style="display:none;">
+        <div class="cart-total-row"><span>Subtotal</span><span id="cart-subtotal">$0.00</span></div>
+        <div class="cart-total-row"><span>Delivery (Minneapolis)</span><span>$15.00</span></div>
+        <div class="cart-total-row"><span>Tax (8.25%)</span><span id="cart-tax">$0.00</span></div>
+        <div class="cart-total-row big"><span>Total</span><span id="cart-total">$0.00</span></div>
+        <button class="btn-checkout" onclick="openCheckout()">Proceed to Checkout &rarr;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     CHECKOUT MODAL
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="checkout-overlay">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h2>🌷 Checkout</h2>
+            <button class="modal-close" onclick="closeCheckout()">&times;</button>
+        </div>
+
+        <div id="checkout-form-wrap">
+            <div class="modal-body">
+
+                <!-- Order Summary -->
+                <div class="order-summary" id="checkout-summary"></div>
+
+                <form id="checkout-form" onsubmit="submitOrder(event)">
+
+                    <div class="modal-section">
+                        <h3>Your Information</h3>
+                        <div class="form-2col">
+                            <div class="f-group"><label>First Name *</label><input type="text" name="fname" placeholder="Jane" required></div>
+                            <div class="f-group"><label>Last Name *</label><input type="text" name="lname" placeholder="Doe" required></div>
+                        </div>
+                        <div class="form-2col">
+                            <div class="f-group"><label>Email *</label><input type="email" name="email" placeholder="jane@email.com" required></div>
+                            <div class="f-group"><label>Phone *</label><input type="tel" name="phone" placeholder="(612) 000-0000" required></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Delivery Address</h3>
+                        <div class="f-group"><label>Street Address *</label><input type="text" name="address" placeholder="123 Main St" required></div>
+                        <div class="form-2col">
+                            <div class="f-group"><label>City *</label><input type="text" name="city" placeholder="Minneapolis" required></div>
+                            <div class="f-group"><label>ZIP Code *</label><input type="text" name="zip" placeholder="55401" required></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Delivery Preferences</h3>
+                        <div class="form-2col">
+                            <div class="f-group">
+                                <label>Delivery Date *</label>
+                                <input type="date" name="deliveryDate" id="delivery-date" required>
+                            </div>
+                            <div class="f-group">
+                                <label>Preferred Time</label>
+                                <select name="deliverySlot">
+                                    <option value="morning">Morning (8AM – 12PM)</option>
+                                    <option value="afternoon" selected>Afternoon (12PM – 5PM)</option>
+                                    <option value="anytime">Anytime (flexible)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Card &amp; Special Requests</h3>
+                        <div class="f-group"><label>Card Message (optional)</label><input type="text" name="cardMessage" placeholder="With love and thinking of you…"></div>
+                        <div class="f-group"><label>Special Instructions</label><textarea name="instructions" placeholder="Color preferences, substitutions, access notes…"></textarea></div>
+                    </div>
+
+                    <div class="submit-msg" id="submit-msg"></div>
+                    <button type="submit" class="btn-checkout" id="submit-btn">Place Order &rarr;</button>
+                    <p style="font-size:11px;color:var(--color-text-light);text-align:center;margin-top:8px;">We'll call to confirm your order and arrange payment.</p>
+                </form>
+            </div>
+        </div>
+
+        <div class="success-screen" id="success-screen">
+            <div class="success-icon">🌸</div>
+            <h3>Order Request Received!</h3>
+            <p>Thank you! Everett will call you within a few hours to confirm your order and arrange payment.</p>
+            <p style="margin-top:10px;">Questions? Call <a href="tel:6124540549" style="color:var(--color-primary);">(612) 454-0549</a></p>
+            <button class="btn-checkout" style="margin-top:24px;max-width:200px;" onclick="closeCheckout()">Continue Shopping</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     ADMIN MODAL
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="admin-overlay">
+    <div class="modal-box admin-box">
+        <div class="modal-head">
+            <h2>&#9881; Admin Panel</h2>
+            <button class="modal-close" onclick="closeAdmin()">&times;</button>
+        </div>
+
+        <!-- Login -->
+        <div id="admin-login">
+            <div class="modal-body">
+                <div class="login-form">
+                    <h3>Admin Sign In</h3>
+                    <p>Enter your admin password to access the control panel.</p>
+                    <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+                    <div class="f-group"><label>Password</label><input type="password" id="admin-pw" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()"></div>
+                    <button class="btn-checkout" onclick="doLogin()">Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="admin-dashboard" style="display:none;">
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="adminTab('products', this)">Products</button>
+                <button class="admin-tab" onclick="adminTab('add', this)">Add Product</button>
+                <button class="admin-tab" onclick="adminTab('orders', this)">Orders</button>
+            </div>
+
+            <!-- Products list -->
+            <div class="admin-panel active" id="ap-products">
+                <div class="admin-product-list" id="admin-product-list"></div>
+                <p style="font-size:12px;color:var(--color-text-light);margin-top:12px;">Changes are saved automatically in your browser.</p>
+            </div>
+
+            <!-- Add product -->
+            <div class="admin-panel" id="ap-add">
+                <form onsubmit="adminAddProduct(event)">
+                    <div class="form-2col">
+                        <div class="f-group"><label>Product Name *</label><input type="text" id="ap-name" placeholder="e.g. Summer Rose Vase" required></div>
+                        <div class="f-group"><label>Price ($) *</label><input type="number" id="ap-price" placeholder="65" min="1" required></div>
+                    </div>
+                    <div class="form-2col">
+                        <div class="f-group">
+                            <label>Category *</label>
+                            <select id="ap-cat">
+                                <option>Best Sellers</option>
+                                <option>Birthday</option>
+                                <option>Sympathy</option>
+                                <option>Luxury</option>
+                            </select>
+                        </div>
+                        <div class="f-group"><label>Image filename</label><input type="text" id="ap-img" placeholder="e.g. 20240630_001300.jpg"></div>
+                    </div>
+                    <div class="f-group"><label>Description</label><textarea id="ap-desc" placeholder="Short description of the arrangement…" style="min-height:60px;"></textarea></div>
+                    <button type="submit" class="btn-checkout">Add Product</button>
+                </form>
+            </div>
+
+            <!-- Orders -->
+            <div class="admin-panel" id="ap-orders">
+                <div class="admin-orders-list" id="admin-orders-list">
+                    <p style="color:var(--color-text-light);font-size:14px;">No orders yet. Orders placed through the shop will appear here.</p>
+                </div>
+                <button class="btn-atc" style="margin-top:16px;max-width:180px;" onclick="clearOrders()">Clear All Orders</button>
+            </div>
+
+            <div class="modal-body" style="padding-top:0;border-top:1px solid var(--color-border);">
+                <button onclick="adminLogout()" style="font-size:12px;color:var(--color-text-light);background:none;border:none;cursor:pointer;margin-top:10px;">&#8592; Sign Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ═════════════════════════════
+   PRODUCT DATA (editable in admin)
+   Products saved to localStorage
+═════════════════════════════ */
+const DEFAULT_PRODUCTS = [
+    // Best Sellers
+    { id: 1,  name: "Garden Rose Blush Vase",           category: "Best Sellers", price: 55,  image: "20240630_001300.jpg",                        desc: "Lush pink roses and garden blooms arranged in an elegant vase — our most popular everyday arrangement.", featured: true,  sizes: [{label:"Classic",price:55},{label:"Deluxe",price:70},{label:"Premium",price:90}] },
+    { id: 2,  name: "Classic Rose Bouquet",              category: "Best Sellers", price: 50,  image: "20231209_230123.jpg",                        desc: "A timeless hand-tied bouquet of mixed roses in rich, seasonal colors. Perfect for any occasion.",                        sizes: [{label:"Classic",price:50},{label:"Deluxe",price:65},{label:"Premium",price:85}] },
+    { id: 3,  name: "Crimson Glow Vase",                 category: "Best Sellers", price: 125, image: "2025-06-15-11-14-14-350.jpg",               desc: "Vibrant red roses arranged in a tall vase — bold, striking, and impossible to ignore.", featured: true,               sizes: [{label:"Classic",price:125},{label:"Deluxe",price:160},{label:"Premium",price:200}] },
+    { id: 4,  name: "Harvest Sunset Arrangement",        category: "Best Sellers", price: 65,  image: "20240222_202618.jpg",                        desc: "Warm orange roses paired with Asiatic lilies — a stunning centerpiece that fills any room with color.",                  sizes: [{label:"Classic",price:65},{label:"Deluxe",price:85},{label:"Premium",price:110}] },
+
+    // Birthday
+    { id: 5,  name: "Pink Blossom Bouquet",              category: "Birthday",     price: 55,  image: "20231206_122041.jpg",                        desc: "Cheerful pink lilies and roses wrapped beautifully — a gorgeous birthday gift she'll love.", featured: true,           sizes: [{label:"Classic",price:55},{label:"Deluxe",price:70},{label:"Premium",price:90}] },
+    { id: 6,  name: "Celebration Wrapped Bouquet",       category: "Birthday",     price: 55,  image: "2025-06-18-01-28-19-002.jpg",               desc: "Bold, colorful mixed florals wrapped in style — crafted to make any birthday unforgettable.",                          sizes: [{label:"Classic",price:55},{label:"Deluxe",price:70},{label:"Premium",price:90}] },
+    { id: 7,  name: "Golden Hour Vase",                  category: "Birthday",     price: 60,  image: "Screenshot_20250108_112437_PhotoDirector.jpg", desc: "Sunlit yellow and red blooms in a show-stopping vase — bright, cheerful, and full of life.",                        sizes: [{label:"Classic",price:60},{label:"Deluxe",price:80},{label:"Premium",price:100}] },
+    { id: 8,  name: "Sunflower Grand Display",           category: "Birthday",     price: 175, image: "Screenshot_20241218_005328_PhotoDirector.jpg", desc: "A tall sunflower and mixed-floral event display overflowing with warmth and energy. Makes a statement.",              sizes: [{label:"Classic",price:175},{label:"Deluxe",price:225},{label:"Premium",price:275}] },
+
+    // Sympathy
+    { id: 9,  name: "Eternal Rest Standing Wreath",      category: "Sympathy",     price: 200, image: "StandingWreath.jpg",                         desc: "A dignified full standing wreath crafted with care and compassion to honor a life well lived.", featured: true,       sizes: [{label:"Classic",price:200},{label:"Deluxe",price:250},{label:"Premium",price:325}] },
+    { id: 10, name: "Serenity Standing Spray",           category: "Sympathy",     price: 175, image: "20241106_022511.jpg",                        desc: "Elegant blue and white florals in a graceful standing spray — a refined tribute for any service.",                    sizes: [{label:"Classic",price:175},{label:"Deluxe",price:225},{label:"Premium",price:275}] },
+    { id: 11, name: "Love & Remember Heart Wreath",      category: "Sympathy",     price: 175, image: "2024-10-28-14-22-39-924.jpg",               desc: "A heartfelt heart-shaped wreath in rich red roses — a powerful symbol of love and remembrance.",                      sizes: [{label:"Classic",price:175},{label:"Deluxe",price:225},{label:"Premium",price:275}] },
+    { id: 12, name: "Peace Lily Living Tribute",         category: "Sympathy",     price: 75,  image: "peacelilyJPEG.jpg",                         desc: "A classic peace lily plant — a lasting, living gift that brings comfort, peace, and lasting beauty.",                  sizes: [{label:"Classic",price:75},{label:"Deluxe",price:95},{label:"Premium",price:125}] },
+
+    // Luxury
+    { id: 13, name: "Royal Blue & Gold Statement Piece", category: "Luxury",       price: 95,  image: "2026-03-06-02-41-23-022.jpg",               desc: "Opulent royal blue and gold florals — a bold, dramatic statement piece designed for special occasions.", featured: true, sizes: [{label:"Classic",price:95},{label:"Deluxe",price:125},{label:"Premium",price:160}] },
+    { id: 14, name: "Crimson Royale with Gold Palms",    category: "Luxury",       price: 125, image: "2024-12-13-23-38-28-351.jpg",               desc: "Deep crimson roses dramatically accented with gilded palm leaves — a one-of-a-kind luxury design.",                  sizes: [{label:"Classic",price:125},{label:"Deluxe",price:165},{label:"Premium",price:210}] },
+    { id: 15, name: "Teal & White Heavenly Angel Display", category: "Luxury",       price: 600, image: "2025-11-21-20-48-22-921.jpg",               desc: "A breathtaking custom arch floral display in teal and white — designed for moments that demand presence.",           sizes: [{label:"Classic",price:600},{label:"Deluxe",price:750},{label:"Premium",price:950}] },
+    { id: 16, name: "White Rose Bridal Cascade",         category: "Luxury",       price: 150, image: "5-0R7_9458.JPG",                            desc: "Cascading white roses in a flowing bridal style — timeless, pure, and absolutely breathtaking.",                     sizes: [{label:"Classic",price:150},{label:"Deluxe",price:195},{label:"Premium",price:250}] },
+];
+
+// ── State ──
+let products = loadProducts();
+let cart = [];
+let currentFilter = 'all';
+
+function loadProducts() {
+    try {
+        const saved = localStorage.getItem('floral_products');
+        return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
+    } catch { return DEFAULT_PRODUCTS; }
+}
+function saveProducts() {
+    localStorage.setItem('floral_products', JSON.stringify(products));
+}
+function loadOrders() {
+    try { return JSON.parse(localStorage.getItem('floral_orders') || '[]'); } catch { return []; }
+}
+function saveOrderRecord(order) {
+    const orders = loadOrders();
+    orders.unshift(order);
+    localStorage.setItem('floral_orders', JSON.stringify(orders.slice(0, 50)));
+}
+
+// ── Render products ──
+function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    const noMsg = document.getElementById('no-products');
+    const filtered = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+
+    if (!filtered.length) {
+        grid.innerHTML = '';
+        noMsg.style.display = 'block';
+        return;
+    }
+    noMsg.style.display = 'none';
+
+    grid.innerHTML = filtered.map(p => `
+        <div class="product-card">
+            <div class="product-card-img" onclick="openProductModal(${p.id})">
+                <img src="${p.image}" alt="${p.name}" onerror="this.style.opacity=0.3">
+                ${p.featured ? '<span class="product-badge">Popular</span>' : ''}
+            </div>
+            <div class="product-card-body">
+                <div class="product-vendor">${p.category}</div>
+                <div class="product-name">${p.name}</div>
+                <div class="product-desc">${p.desc || ''}</div>
+                <div class="product-price">$${p.price.toFixed(2)} <span>starting from</span></div>
+                <button class="btn-atc" onclick="openProductModal(${p.id})">Choose Size & Add</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterProducts(cat, btn) {
+    currentFilter = cat;
+    document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProducts();
+}
+
+// ── Cart ──
+function addToCart(productId, sizeObj) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    const size = sizeObj || (product.sizes ? product.sizes[0] : { label: 'Standard', price: product.price });
+    const cartKey = productId + '-' + size.label;
+    const existing = cart.find(i => i.cartKey === cartKey);
+    if (existing) { existing.qty++; }
+    else { cart.push({ ...product, cartKey, sizeLabel: size.label, price: size.price, qty: 1 }); }
+    updateCartUI();
+    openCart();
+}
+
+function updateQty(cartKey, delta) {
+    const item = cart.find(i => i.cartKey === cartKey);
+    if (!item) return;
+    item.qty = Math.max(0, item.qty + delta);
+    if (item.qty === 0) cart = cart.filter(i => i.cartKey !== cartKey);
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cart-count').textContent = count;
+    document.getElementById('drawer-count').textContent = count;
+
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const delivery = cart.length ? 15 : 0;
+    const tax = subtotal * 0.0825;
+    const total = subtotal + delivery + tax;
+
+    document.getElementById('cart-subtotal').textContent = '$' + subtotal.toFixed(2);
+    document.getElementById('cart-tax').textContent = '$' + tax.toFixed(2);
+    document.getElementById('cart-total').textContent = '$' + total.toFixed(2);
+
+    const itemsEl = document.getElementById('cart-items');
+    const emptyEl = document.getElementById('cart-empty');
+    const totalsEl = document.getElementById('cart-totals');
+
+    if (!cart.length) {
+        emptyEl.style.display = 'block';
+        totalsEl.style.display = 'none';
+        itemsEl.innerHTML = '';
+        itemsEl.appendChild(emptyEl);
+        return;
+    }
+
+    emptyEl.style.display = 'none';
+    totalsEl.style.display = 'block';
+
+    itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <img class="cart-item-img" src="${item.image}" alt="${item.name}" onerror="this.style.opacity=0.3">
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-cat">${item.sizeLabel || item.category}</div>
+                <div class="cart-qty">
+                    <button onclick="updateQty('${item.cartKey}', -1)">−</button>
+                    <span>${item.qty}</span>
+                    <button onclick="updateQty('${item.cartKey}', +1)">+</button>
+                </div>
+            </div>
+            <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+        </div>
+    `).join('');
+}
+
+function openCart() {
+    document.getElementById('cart-overlay').classList.add('open');
+    document.getElementById('cart-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ── Checkout ──
+function openCheckout() {
+    closeCart();
+    // Set min delivery date (tomorrow)
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('delivery-date').min = tomorrow.toISOString().split('T')[0];
+    document.getElementById('delivery-date').value = tomorrow.toISOString().split('T')[0];
+
+    // Build order summary
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const delivery = 15;
+    const tax = subtotal * 0.0825;
+    const total = subtotal + delivery + tax;
+    document.getElementById('checkout-summary').innerHTML = `
+        ${cart.map(i => `<div class="order-summary-row"><span>${i.name}${i.sizeLabel ? ' — ' + i.sizeLabel : ''} × ${i.qty}</span><span>$${(i.price * i.qty).toFixed(2)}</span></div>`).join('')}
+        <div class="order-summary-row"><span>Delivery</span><span>$15.00</span></div>
+        <div class="order-summary-row"><span>Tax (8.25%)</span><span>$${tax.toFixed(2)}</span></div>
+        <div class="order-summary-row total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+    `;
+
+    document.getElementById('checkout-form-wrap').style.display = 'block';
+    document.getElementById('success-screen').style.display = 'none';
+    document.getElementById('checkout-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeCheckout() {
+    document.getElementById('checkout-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function submitOrder(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('submit-btn');
+    const msg = document.getElementById('submit-msg');
+
+    if (!cart.length) {
+        msg.textContent = 'Your cart is empty.';
+        msg.className = 'submit-msg error';
+        return;
+    }
+
+    btn.disabled = true;
+    msg.textContent = 'Submitting your order request…';
+    msg.className = 'submit-msg loading';
+
+    const data = new FormData(form);
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const tax = subtotal * 0.0825;
+    const total = subtotal + 15 + tax;
+    const orderNumber = 'ORD-' + Date.now();
+
+    const orderRecord = {
+        orderNumber,
+        date: new Date().toLocaleString(),
+        customer: data.get('fname') + ' ' + data.get('lname'),
+        email: data.get('email'),
+        phone: data.get('phone'),
+        address: data.get('address') + ', ' + data.get('city') + ' ' + data.get('zip'),
+        deliveryDate: data.get('deliveryDate'),
+        deliverySlot: data.get('deliverySlot'),
+        cardMessage: data.get('cardMessage'),
+        instructions: data.get('instructions'),
+        items: cart.map(i => ({ name: i.name, size: i.sizeLabel || '', qty: i.qty, price: i.price })),
+        total: total.toFixed(2),
+        status: 'pending',
+    };
+
+    saveOrderRecord(orderRecord);
+
+    setTimeout(() => {
+        cart = [];
+        updateCartUI();
+        btn.disabled = false;
+        msg.className = 'submit-msg';
+        document.getElementById('checkout-form-wrap').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+    }, 1200);
+}
+
+// ── Product Detail Modal ──
+let pmSelectedSize = null;
+
+function openProductModal(productId) {
+    const p = products.find(x => x.id === productId);
+    if (!p) return;
+    const sizes = p.sizes && p.sizes.length ? p.sizes : [{ label: 'Standard', price: p.price }];
+    pmSelectedSize = sizes[0];
+
+    document.getElementById('pm-img').src = p.image;
+    document.getElementById('pm-img').alt = p.name;
+    document.getElementById('pm-category').textContent = p.category;
+    document.getElementById('pm-name').textContent = p.name;
+    document.getElementById('pm-desc').textContent = p.desc || '';
+    document.getElementById('pm-price').textContent = '$' + sizes[0].price.toFixed(2);
+
+    document.getElementById('pm-sizes').innerHTML = sizes.map((s, i) => `
+        <button class="pm-size-btn${i === 0 ? ' selected' : ''}"
+            onclick="selectPMSize('${s.label}', ${s.price}, this)">
+            <span class="size-name">${s.label}</span>
+            <span class="size-price">$${s.price}</span>
+        </button>
+    `).join('');
+
+    document.getElementById('btn-pm-atc').onclick = function () {
+        addToCart(p.id, pmSelectedSize);
+        closeProductModal();
+    };
+
+    document.getElementById('product-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function selectPMSize(label, price, btn) {
+    pmSelectedSize = { label, price };
+    document.querySelectorAll('.pm-size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('pm-price').textContent = '$' + price.toFixed(2);
+}
+
+function closeProductModal() {
+    document.getElementById('product-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function handlePMOverlayClick(e) {
+    if (e.target === document.getElementById('product-modal-overlay')) closeProductModal();
+}
+
+// ── Admin ──
+const ADMIN_PASSWORD = '1341admin';
+let adminUnlocked = false;
+
+// Secret: click logo 5 times to open admin
+let logoClicks = 0, logoTimer;
+document.getElementById('logo-click').addEventListener('click', function(e) {
+    e.preventDefault();
+    logoClicks++;
+    clearTimeout(logoTimer);
+    if (logoClicks >= 5) { logoClicks = 0; openAdmin(); }
+    else { logoTimer = setTimeout(() => { logoClicks = 0; window.location.href = 'index.html'; }, 600); }
+});
+
+function openAdmin() {
+    document.getElementById('admin-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (adminUnlocked) showAdminDashboard();
+    else {
+        document.getElementById('admin-login').style.display = 'block';
+        document.getElementById('admin-dashboard').style.display = 'none';
+    }
+}
+function closeAdmin() {
+    document.getElementById('admin-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function doLogin() {
+    const pw = document.getElementById('admin-pw').value;
+    if (pw === ADMIN_PASSWORD) {
+        adminUnlocked = true;
+        document.getElementById('login-error').style.display = 'none';
+        showAdminDashboard();
+    } else {
+        document.getElementById('login-error').style.display = 'block';
+    }
+}
+function adminLogout() {
+    adminUnlocked = false;
+    document.getElementById('admin-dashboard').style.display = 'none';
+    document.getElementById('admin-login').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+}
+function showAdminDashboard() {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-dashboard').style.display = 'block';
+    renderAdminProducts();
+    renderAdminOrders();
+}
+function adminTab(tab, btn) {
+    document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('ap-' + tab).classList.add('active');
+}
+function renderAdminProducts() {
+    const list = document.getElementById('admin-product-list');
+    list.innerHTML = products.map(p => `
+        <div class="admin-product-row">
+            <img src="${p.image}" alt="${p.name}" onerror="this.style.opacity=0.3">
+            <div class="admin-product-row-info">
+                <div class="name">${p.name}</div>
+                <div class="cat">${p.category}</div>
+            </div>
+            <div class="price">$${p.price}</div>
+            <button class="btn-del" onclick="adminDeleteProduct(${p.id})">Delete</button>
+        </div>
+    `).join('') || '<p style="color:var(--color-text-light);font-size:14px;">No products yet.</p>';
+}
+function adminDeleteProduct(id) {
+    if (!confirm('Delete this product?')) return;
+    products = products.filter(p => p.id !== id);
+    saveProducts();
+    renderProducts();
+    renderAdminProducts();
+}
+function adminAddProduct(e) {
+    e.preventDefault();
+    const name = document.getElementById('ap-name').value.trim();
+    const price = parseFloat(document.getElementById('ap-price').value);
+    const cat = document.getElementById('ap-cat').value;
+    const img = document.getElementById('ap-img').value.trim() || 'peacelilyJPEG.jpg';
+    const desc = document.getElementById('ap-desc').value.trim();
+    if (!name || !price) return;
+    const newProd = { id: Date.now(), name, category: cat, price, image: img, desc };
+    products.unshift(newProd);
+    saveProducts();
+    renderProducts();
+    renderAdminProducts();
+    e.target.reset();
+    adminTab('products', document.querySelector('.admin-tab'));
+}
+function renderAdminOrders() {
+    const orders = loadOrders();
+    const list = document.getElementById('admin-orders-list');
+    if (!orders.length) {
+        list.innerHTML = '<p style="color:var(--color-text-light);font-size:14px;">No orders yet.</p>';
+        return;
+    }
+    list.innerHTML = orders.map(o => `
+        <div class="admin-order-row">
+            <div class="order-top">
+                <span class="order-num">${o.orderNumber}</span>
+                <span class="order-total">$${o.total}</span>
+            </div>
+            <div class="order-meta">${o.customer} &middot; ${o.email} &middot; ${o.phone}</div>
+            <div class="order-meta" style="margin-top:4px;">Delivery: ${o.deliveryDate} (${o.deliverySlot}) &middot; ${o.address}</div>
+            <div class="order-meta" style="margin-top:6px;">${o.items.map(i => i.name + (i.size ? ' (' + i.size + ')' : '') + ' × ' + i.qty).join(', ')}</div>
+            <div style="margin-top:8px;"><span class="status-badge status-pending">Pending</span></div>
+        </div>
+    `).join('');
+}
+function clearOrders() {
+    if (!confirm('Clear all orders? This cannot be undone.')) return;
+    localStorage.removeItem('floral_orders');
+    renderAdminOrders();
+}
+
+// ── Newsletter ──
+function handleNewsletter(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ Subscribed!';
+    btn.style.background = '#2e7d32';
+    setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; e.target.reset(); }, 3000);
+}
+
+// ── Nav toggle ──
+document.getElementById('nav-toggle').addEventListener('click', () => {
+    document.getElementById('main-nav').classList.toggle('open');
+});
+
+// ── Init ──
+renderProducts();
+updateCartUI();
+</script>
+<script src="polish.js"></script>
+</body>
+</html>
