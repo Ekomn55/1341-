@@ -586,31 +586,54 @@
         }
         .founder-links a:hover { color: #fff; }
 
-        /* ── Gallery ── */
+        /* ── Gallery / Carousel ── */
         .gallery-section {
             border-top: 1px solid rgba(255,255,255,0.06);
         }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .rw-slider-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+        .rw-track {
+            display: flex;
             gap: 3px;
+            transition: transform .6s cubic-bezier(.4,0,.2,1);
+            will-change: transform;
         }
         .gallery-item {
+            flex: 0 0 calc(33.333% - 2px);
             overflow: hidden;
             display: block;
-            height: 300px;
+            height: 340px;
             background: #111;
+            text-decoration: none;
         }
         .gallery-item img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             display: block;
             transition: transform .55s ease, filter .3s;
             filter: brightness(0.82);
             background: #111;
         }
         .gallery-item:hover img { transform: scale(1.04); filter: brightness(1); }
+        .rw-dots {
+            display: flex; justify-content: center; gap: 8px;
+            padding: 18px 0 4px;
+        }
+        .rw-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); border: none; cursor: pointer;
+            padding: 0; transition: background .2s, transform .2s;
+        }
+        .rw-dot.active { background: #1E8080; transform: scale(1.3); }
+        @media (max-width: 768px) {
+            .gallery-item { flex: 0 0 calc(50% - 2px); height: 240px; }
+        }
+        @media (max-width: 480px) {
+            .gallery-item { flex: 0 0 calc(85%); height: 220px; }
+        }
 
         /* ── Reviews ── */
         .reviews-section {
@@ -1171,15 +1194,89 @@
             <a href="gallery.html" class="section-link">Full Gallery &rarr;</a>
         </div>
     </div>
-    <div class="gallery-grid">
-        <a href="gallery.html" class="gallery-item"><img src="2025-12-01-17-37-55-581.jpg" alt="Classic Red Roses" onerror="this.style.opacity=0.2"></a>
-        <a href="gallery.html" class="gallery-item"><img src="2025-10-12-18-13-53-487.jpg" alt="Autumn Sunflower Arrangement" onerror="this.style.opacity=0.2"></a>
-        <a href="gallery.html" class="gallery-item"><img src="2024-11-15-14-11-56-748.jpg" alt="Pink Rose Vase Bouquet" onerror="this.style.opacity=0.2"></a>
-        <a href="gallery.html" class="gallery-item"><img src="2025-07-01-22-39-54-767.jpg" alt="Red Gerbera Daisy Vase" onerror="this.style.opacity=0.2"></a>
-        <a href="gallery.html" class="gallery-item"><img src="20231209_222157.jpg" alt="Emerald Garden Arrangement" onerror="this.style.opacity=0.2"></a>
-        <a href="gallery.html" class="gallery-item"><img src="20240419_211348.jpg" alt="Red Rose Gift Box" onerror="this.style.opacity=0.2"></a>
+    <div class="rw-slider-wrap">
+        <div class="rw-track" id="rw-track">
+            <a href="gallery.html" class="gallery-item"><img src="2025-12-01-17-37-55-581.jpg" alt="Classic Red Roses" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="2025-10-12-18-13-53-487.jpg" alt="Autumn Sunflower Arrangement" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="2024-11-15-14-11-56-748.jpg" alt="Pink Rose Vase Bouquet" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="2025-07-01-22-39-54-767.jpg" alt="Red Gerbera Daisy Vase" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="20231209_222157.jpg" alt="Emerald Garden Arrangement" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="20240419_211348.jpg" alt="Red Rose Gift Box" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="silver and blue centerpeice.jpg" alt="Silver & Blue Centerpiece" onerror="this.style.opacity=0.2"></a>
+            <a href="gallery.html" class="gallery-item"><img src="2026-03-06-02-41-23-022.jpg" alt="Blue & Gold Luxury Arrangement" onerror="this.style.opacity=0.2"></a>
+        </div>
     </div>
+    <div class="rw-dots" id="rw-dots"></div>
 </section>
+
+<script>
+(function () {
+    var track = document.getElementById('rw-track');
+    var dotsWrap = document.getElementById('rw-dots');
+    if (!track) return;
+
+    var items = track.querySelectorAll('.gallery-item');
+    var total = items.length;
+    var current = 0;
+    var autoTimer;
+
+    // How many items visible depends on screen width
+    function visibleCount() {
+        if (window.innerWidth <= 480) return 1;
+        if (window.innerWidth <= 768) return 2;
+        return 3;
+    }
+
+    // Total number of dot positions
+    function totalSlides() {
+        return total - visibleCount() + 1;
+    }
+
+    // Build dots
+    function buildDots() {
+        dotsWrap.innerHTML = '';
+        var n = totalSlides();
+        for (var i = 0; i < n; i++) {
+            var d = document.createElement('button');
+            d.className = 'rw-dot' + (i === current ? ' active' : '');
+            d.setAttribute('aria-label', 'Slide ' + (i + 1));
+            (function(idx) {
+                d.addEventListener('click', function () { goTo(idx); resetTimer(); });
+            })(i);
+            dotsWrap.appendChild(d);
+        }
+    }
+
+    function goTo(idx) {
+        var n = totalSlides();
+        current = Math.max(0, Math.min(idx, n - 1));
+        var itemW = items[0].offsetWidth + 3; // width + gap
+        track.style.transform = 'translateX(-' + (current * itemW) + 'px)';
+        dotsWrap.querySelectorAll('.rw-dot').forEach(function (d, i) {
+            d.classList.toggle('active', i === current);
+        });
+    }
+
+    function next() {
+        goTo(current + 1 < totalSlides() ? current + 1 : 0);
+    }
+
+    function resetTimer() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(next, 3500);
+    }
+
+    // Pause on hover
+    track.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+    track.addEventListener('mouseleave', resetTimer);
+
+    // Rebuild on resize
+    window.addEventListener('resize', function () { buildDots(); goTo(0); });
+
+    buildDots();
+    resetTimer();
+})();
+</script>
 
 <!-- ── Reviews ── -->
 <section class="section reviews-section" id="reviews">
