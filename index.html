@@ -1493,27 +1493,42 @@
     function handleSubmit(e) {
         e.preventDefault();
         const btn = document.getElementById('submit-btn');
-        btn.textContent = '✓ Message Sent!';
-        btn.style.background = '#2e7d32';
-        btn.style.color = '#fff';
-        setTimeout(() => {
-            btn.textContent = 'Send Message';
-            btn.style.background = '';
-            btn.style.color = '';
-            e.target.reset();
-        }, 3000);
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+        const data = new FormData(e.target);
+        data.append('_subject', '1341 Floral — New Message from Homepage');
+        fetch('https://formspree.io/f/mdayzdrq', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+            .then(r => {
+                if (r.ok) {
+                    btn.textContent = '✓ Message Sent!';
+                    btn.style.background = '#2e7d32';
+                    btn.style.color = '#fff';
+                    e.target.reset();
+                    setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; btn.style.color = ''; btn.disabled = false; }, 3000);
+                } else {
+                    btn.textContent = 'Try Again';
+                    btn.disabled = false;
+                }
+            })
+            .catch(() => { btn.textContent = 'Try Again'; btn.disabled = false; });
     }
 
     function handleNewsletter(e) {
         e.preventDefault();
         const btn = document.getElementById('nl-btn');
-        btn.textContent = '✓ Subscribed!';
-        btn.style.background = '#2e7d32';
-        setTimeout(() => {
-            btn.textContent = 'Subscribe';
-            btn.style.background = '';
-            e.target.reset();
-        }, 3000);
+        const email = e.target.querySelector('input[type="email"]').value;
+        btn.textContent = 'Subscribing…';
+        btn.disabled = true;
+        const data = new FormData();
+        data.append('email', email);
+        data.append('_subject', '1341 Floral — Newsletter Signup');
+        fetch('https://formspree.io/f/mdayzdrq', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+            .then(() => {
+                btn.textContent = '✓ Subscribed!';
+                btn.style.background = '#2e7d32';
+                setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; btn.disabled = false; e.target.reset(); }, 3000);
+            })
+            .catch(() => { btn.textContent = 'Subscribe'; btn.disabled = false; });
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(a => {

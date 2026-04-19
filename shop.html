@@ -1007,14 +1007,30 @@ function submitOrder(e) {
 
     saveOrderRecord(orderRecord);
 
-    setTimeout(() => {
-        cart = [];
-        updateCartUI();
-        btn.disabled = false;
-        msg.className = 'submit-msg';
-        document.getElementById('checkout-form-wrap').style.display = 'none';
-        document.getElementById('success-screen').style.display = 'block';
-    }, 1200);
+    // Send to email via Formspree
+    const emailData = new FormData();
+    emailData.append('_subject', '1341 Floral — New Order ' + orderNumber);
+    emailData.append('Order Number', orderNumber);
+    emailData.append('Customer', orderRecord.customer);
+    emailData.append('Email', orderRecord.email);
+    emailData.append('Phone', orderRecord.phone);
+    emailData.append('Address', orderRecord.address);
+    emailData.append('Delivery Date', orderRecord.deliveryDate);
+    emailData.append('Delivery Time', orderRecord.deliverySlot);
+    emailData.append('Card Message', orderRecord.cardMessage || '');
+    emailData.append('Instructions', orderRecord.instructions || '');
+    emailData.append('Items', cart.map(i => i.name + (i.sizeLabel ? ' (' + i.sizeLabel + ')' : '') + ' x' + i.qty + ' @ $' + i.price).join(', '));
+    emailData.append('Total', '$' + total.toFixed(2));
+
+    fetch('https://formspree.io/f/mdayzdrq', { method: 'POST', body: emailData, headers: { 'Accept': 'application/json' } })
+        .finally(() => {
+            cart = [];
+            updateCartUI();
+            btn.disabled = false;
+            msg.className = 'submit-msg';
+            document.getElementById('checkout-form-wrap').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+        });
 }
 
 // ── Product Detail Modal ──

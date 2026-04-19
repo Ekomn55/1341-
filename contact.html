@@ -437,16 +437,40 @@
 
     function handleContactForm(e) {
         e.preventDefault();
-        document.getElementById('contact-form').style.display = 'none';
-        document.getElementById('form-success').style.display = 'block';
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+        const data = new FormData(e.target);
+        data.append('_subject', '1341 Floral — New Contact Message');
+        fetch('https://formspree.io/f/mdayzdrq', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+            .then(r => {
+                if (r.ok) {
+                    document.getElementById('contact-form').style.display = 'none';
+                    document.getElementById('form-success').style.display = 'block';
+                } else {
+                    btn.textContent = 'Try Again';
+                    btn.disabled = false;
+                }
+            })
+            .catch(() => { btn.textContent = 'Try Again'; btn.disabled = false; });
     }
 
     function handleNewsletter(e) {
         e.preventDefault();
         const btn = e.target.querySelector('button');
-        btn.textContent = '✓ Subscribed!';
-        btn.style.background = '#2e7d32';
-        setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; e.target.reset(); }, 3000);
+        const email = e.target.querySelector('input[type="email"]').value;
+        btn.textContent = 'Subscribing…';
+        btn.disabled = true;
+        const data = new FormData();
+        data.append('email', email);
+        data.append('_subject', '1341 Floral — Newsletter Signup');
+        fetch('https://formspree.io/f/mdayzdrq', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+            .then(() => {
+                btn.textContent = '✓ Subscribed!';
+                btn.style.background = '#2e7d32';
+                setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; btn.disabled = false; e.target.reset(); }, 3000);
+            })
+            .catch(() => { btn.textContent = 'Subscribe'; btn.disabled = false; });
     }
 </script>
 <script src="polish.js"></script>
